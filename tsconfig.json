@@ -19,11 +19,14 @@
 		"noImplicitAny": false,
 		"strictBindCallApply": false,
 		"forceConsistentCasingInFileNames": false,
-		"noFallthroughCasesInSwitch": false
+		"noFallthroughCasesInSwitch": false,
+		"types": ["node", "jest", "express"],
+		"typeRoots": ["typings/global.d.ts"]
 	},
 	"compileOnSave": true,
 	"include": [
-		"src",
-		"test"
+		"typings/global.d.ts",
+		"src/**/*",
+		"test/**/*"
 	]
 }

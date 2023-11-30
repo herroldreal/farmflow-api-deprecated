@@ -1,6 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
-import { FirebaseAuthStrategy } from './firebaseAuth.strategy';
+import { FirebaseAuthStrategy } from './strategies';
 
 @Global()
 @Module({
