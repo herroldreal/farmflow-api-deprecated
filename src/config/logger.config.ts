@@ -17,13 +17,13 @@ export const loggerOptions: Params = {
       ...(process.env.NODE_ENV === 'production'
         ? {}
         : {
-          level: 'debug',
-          // https://github.com/pinojs/pino-pretty
-          transport: {
-            target: 'pino-pretty',
-            options: { sync: true, singleLine: true },
-          },
-        }),
+            level: 'debug',
+            // https://github.com/pinojs/pino-pretty
+            transport: {
+              target: 'pino-pretty',
+              options: { sync: true, singleLine: true },
+            },
+          }),
       autoLogging: {
         ignore: (req) => passUrl.has((<Request>req).originalUrl),
       },

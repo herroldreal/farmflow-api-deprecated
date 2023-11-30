@@ -1,5 +1,5 @@
 import { ArgsType } from '@nestjs/graphql';
-import { IsString, ArrayNotEmpty, IsBoolean } from 'class-validator';
+import { IsString, ArrayNotEmpty, IsBoolean, IsOptional } from 'class-validator';
 
 @ArgsType()
 export class UserArgs {
@@ -19,7 +19,12 @@ export class UserArgs {
   public country?: string;
 
   @IsString({ always: true })
+  @IsOptional()
   public countryCode?: string;
+
+  @IsString()
+  @IsOptional()
+  public farmId?: string;
 
   @IsBoolean()
   public blackListed?: boolean;

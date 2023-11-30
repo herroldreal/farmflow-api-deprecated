@@ -1,1 +1,1 @@
-export * from '../providers/user.service';
+export * from './user.resolver';

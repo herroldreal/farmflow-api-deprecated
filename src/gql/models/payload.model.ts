@@ -4,5 +4,6 @@ import { ObjectType } from '@nestjs/graphql';
 export class Payload {
   public userId!: string;
   public username!: string;
+  public farmId?: string;
   public roles: string[] = [];
 }

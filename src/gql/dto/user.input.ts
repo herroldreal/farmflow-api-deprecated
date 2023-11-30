@@ -20,11 +20,16 @@ export class UserInput {
   public country!: string;
 
   @IsString()
-  public countryCode!: string;
+  @IsOptional()
+  public countryCode?: string;
+
+  @IsString()
+  @IsOptional()
+  public farmId?: string;
 
   @IsBoolean()
   @IsOptional()
-  public blackListed!: boolean;
+  public blackListed?: boolean;
 
   @ArrayNotEmpty()
   @IsString({ each: true })

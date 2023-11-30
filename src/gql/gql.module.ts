@@ -2,9 +2,10 @@ import { ApolloDriver } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { GqlModuleOptions, GraphQLModule } from '@nestjs/graphql';
+import { UserRepository } from '@repositories/user.repository';
 
-import { SimpleService } from './providers';
-import { UserService } from './resolvers';
+import { UserService } from './providers';
+import { UserResolver } from './resolvers';
 import { DateScalar } from './scalars';
 
 /**
@@ -20,6 +21,7 @@ import { DateScalar } from './scalars';
       inject: [ConfigService],
     }),
   ],
-  providers: [SimpleResolver, SimpleService, DateScalar],
+  exports: [UserRepository],
+  providers: [UserResolver, UserService, DateScalar, UserRepository],
 })
 export class GqlModule {}

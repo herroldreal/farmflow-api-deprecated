@@ -1,5 +1,6 @@
+import { FirestoreModule } from '@common/db/firestore.module';
 import { Module, ValidationPipe } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_PIPE } from '@nestjs/core';
 import { LoggerModule } from 'nestjs-pino';
 
@@ -17,6 +18,13 @@ import { GqlModule } from './gql';
       load: [configuration],
     }),
     // Service Modules
+    FirestoreModule.forRoot({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        keyFilename: configService.get<string>('SA_KEY'),
+      }),
+      inject: [ConfigService],
+    }),
     AuthModule, // Global for Middleware
     CommonModule, // Global
     BaseModule,
