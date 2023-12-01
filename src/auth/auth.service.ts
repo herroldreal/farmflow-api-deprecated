@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { UserService } from '@shared/user';
 
-import type { JwtPayload, JwtSign, Payload, TokenPayload } from './auth.interface';
-import { User, UserService } from '../shared/user';
+import type { Account, JwtPayload, JwtSign, Payload, TokenPayload } from './auth.interface';
 
 @Injectable()
 export class AuthService {
@@ -13,15 +13,8 @@ export class AuthService {
     private config: ConfigService,
   ) {}
 
-  public async validateUser(username: string, password: string): Promise<User | null> {
-    const user = await this.user.fetch(username);
-
-    if (user.password === password) {
-      const { password: pass, ...result } = user;
-      return result;
-    }
-
-    return null;
+  public async createAccount(account: Account): Promise<Payload | null> {
+    return this.user.createAccount(account);
   }
 
   public validateRefreshToken(data: Payload, refreshToken: string): boolean {
@@ -44,15 +37,10 @@ export class AuthService {
 
   public getPayload(token: string): Payload | null {
     try {
-      const payload = this.jwt.decode<TokenPayload>(token);
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      if (!payload) {
-        return null;
-      }
-
+      const payload = this.jwt.decode<TokenPayload | null>(token);
+      if (!payload) return null;
       return { userId: payload.sub, username: payload.username, roles: payload.roles };
     } catch {
-      // Unexpected token i in JSON at position XX
       return null;
     }
   }

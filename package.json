@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"description": "Cattle Farm Management API App",
 	"private": true,
-	"main": "dist/index.js",
+	"main": "dist/app.js",
 	"author": {
 		"email": "realherrold@gmail.com",
 		"name": "Herrold H. Real",
@@ -60,6 +60,7 @@
 		"helmet": "7.1.0",
 		"nanoid": "3.3.4",
 		"nestjs-pino": "3.5.0",
+		"nodemailer": "6.9.7",
 		"passport": "0.7.0",
 		"passport-firebase-jwt": "1.2.1",
 		"passport-jwt": "4.0.1",

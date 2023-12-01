@@ -5,8 +5,9 @@ import { BaseInput } from './base.input';
 
 @InputType()
 export class CreateOwnerInput extends BaseInput {
-  @Field({ name: 'id', nullable: false })
-  @IsString({ always: true })
+  @Field({ name: 'id', nullable: true })
+  @IsOptional()
+  @IsString()
   public id!: string;
 
   @IsString()

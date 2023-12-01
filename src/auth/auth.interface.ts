@@ -9,6 +9,20 @@ export interface JwtPayload {
   roles: string[];
 }
 
+export interface Account {
+  email: string;
+  blackListed: boolean;
+  name: string;
+  roles: string[];
+  password: string;
+  phone: string;
+}
+
+export interface Credentials {
+  email: string;
+  password: string;
+}
+
 export interface TokenPayload {
   sub: string;
   username: string;

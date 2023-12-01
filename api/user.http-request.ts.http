@@ -1,0 +1,24 @@
+### Login User with Email & Password
+POST http://localhost:5001/farmflow-d2ece/us-central1/api/auth/login
+Accept: application/json
+Content-Type: application/json
+
+{
+	"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlcyI6WyJvd25lciJdLCJ1c2VybmFtZSI6ImhlcnJvbGQiLCJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.kqsubiyH45I2FrFKo9YzGPI8_X5GLAQi4NAR-mEDiZE"
+}
+
+### Create and register user account
+POST http://127.0.0.1:5001/farmflow-d2ece/us-central1/api/auth/register
+Accept: : application/json
+Content-Type: application/json
+
+{
+	"email": "realherrold2@gmail.com",
+	"blackListed": false,
+	"name": "Herrold Real",
+	"roles": [
+		"owner"
+	],
+	"password": "HReal92.1",
+	"phone": "+505 89517503"
+}

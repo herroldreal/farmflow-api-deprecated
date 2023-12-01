@@ -1,13 +1,28 @@
 import { Controller, Post, Body } from '@nestjs/common';
+import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
-import { AuthService, Payload } from '../../auth';
+import { Account, AuthService, Payload } from '../../auth';
 
-@Controller()
+@Controller('auth')
 export class AuthController {
-  constructor(private auth: AuthService) {}
+  constructor(
+    @InjectPinoLogger('Auth') private readonly logger: PinoLogger,
+    private auth: AuthService,
+  ) {}
 
-  @Post('auth/user')
-  public createUser(@Body('token') token: string): Payload | null {
-    return this.auth.getPayload(token);
+  @Post('register')
+  public async registerUser(@Body() account: Account): Promise<Payload | null> {
+    this.logger.info('Create account');
+    const response = await this.auth.createAccount(account);
+    this.logger.info(`User account created => ${JSON.stringify(response, null, 2)}`);
+    return response;
+  }
+
+  @Post('login')
+  public login(@Body('token') token: string): Payload | null {
+    this.logger.info(`auth/user => ${token}`);
+    const response = this.auth.getPayload(token);
+    this.logger.info(`Response => ${JSON.stringify(response, null, 2)}`);
+    return response;
   }
 }
