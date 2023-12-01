@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/ban-ts-comment */
+
 import { Logger as NestLogger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import type { NestExpressApplication } from '@nestjs/platform-express';
@@ -6,11 +8,6 @@ import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 import { middleware } from './app.middleware';
 import { AppModule } from './app.module';
 
-/**
- * https://docs.nestjs.com
- * https://github.com/nestjs/nest/tree/master/sample
- * https://github.com/nestjs/nest/issues/2249#issuecomment-494734673
- */
 async function bootstrap(): Promise<string> {
   const isProduction = process.env.NODE_ENV === 'production';
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {

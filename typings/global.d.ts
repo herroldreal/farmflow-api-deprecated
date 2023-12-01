@@ -15,6 +15,11 @@ export declare global {
       DB_PASSWORD: string;
       DB_NAME: string;
 
+      SA_KEY: string;
+      PROJECT_ID: string;
+      PRIVATE_KEY: string;
+      CLIENT_EMAIL: string;
+
       JWT_SECRET: string;
       JWT_REFRESH_SECRET: string;
     }

@@ -5,6 +5,7 @@ import {
 } from '@common/db/firestore.provider';
 import { Firestore, Settings } from '@google-cloud/firestore';
 import { Module, DynamicModule } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 interface FirestoreModuleOptions {
   imports: any[];
@@ -22,12 +23,12 @@ export class FirestoreModule {
     };
     const dbProvider = {
       provide: FirestoreDatabaseProvider,
-      useFactory: (config) => new Firestore(config),
+      useFactory: (config: ConfigService) => new Firestore(config),
       inject: [FirestoreOptionsProvider],
     };
     const collectionProviders = FirestoreCollectionProviders.map((providerName) => ({
       provide: providerName,
-      useFactory: (db) => db.collection(providerName),
+      useFactory: (db: Firestore) => db.collection(providerName),
       inject: [FirestoreDatabaseProvider],
     }));
 

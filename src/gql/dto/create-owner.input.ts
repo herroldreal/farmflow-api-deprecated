@@ -1,51 +1,64 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { IsString, IsBoolean, ArrayNotEmpty, IsOptional } from 'class-validator';
+import { IsString, IsBoolean, ArrayNotEmpty, IsOptional, IsUrl } from 'class-validator';
 
 import { BaseInput } from './base.input';
 
 @InputType()
 export class CreateOwnerInput extends BaseInput {
-  @Field({ name: 'Id', nullable: false })
+  @Field({ name: 'id', nullable: false })
   @IsString({ always: true })
   public id!: string;
 
-  @IsString({ always: true })
-  @Field({ name: 'Name', nullable: false })
+  @IsString()
+  @Field({ name: 'name', nullable: false })
   public name!: string;
 
-  @IsString({ always: true })
-  @Field({ name: 'Email', nullable: false })
+  @IsString()
+  @Field({ name: 'email', nullable: false })
   public email!: string;
 
-  @IsString({ always: true })
-  @Field({ name: 'Phone', nullable: false })
+  @IsString()
+  @Field({ name: 'phone', nullable: false })
   public phone!: string;
 
   @IsString()
+  @IsUrl()
   @IsOptional()
-  @Field({ name: 'Country', nullable: true })
+  @Field({
+    name: 'picture',
+    nullable: true,
+    description: 'Porfile Picture',
+    defaultValue: 'https://thefarmflot/default/',
+  })
+  public picture?: string;
+
+  @IsString()
+  @IsOptional()
+  @Field({ name: 'country', nullable: true, defaultValue: 'Nicaragua' })
   public country?: string;
 
-  @Field({ name: 'CountryCode', nullable: true })
+  @Field({ name: 'countryCode', nullable: true, defaultValue: '505' })
   @IsString()
   @IsOptional()
   public countryCode?: string;
 
   @IsString()
-  @Field({ name: 'FarmID', description: 'Farm ID to which this user belongs (Owner or Worker)', nullable: true })
+  @Field({ name: 'farmId', description: 'Farm ID to which this user belongs (Owner or Worker)', nullable: true })
   @IsOptional()
   public farmId?: string;
 
   @IsBoolean()
-  @Field({ name: 'BlackListed', description: '', nullable: false })
+  @IsOptional()
+  @Field({ name: 'blackListed', description: '', nullable: true, defaultValue: false })
   public blackListed?: boolean;
 
   @ArrayNotEmpty()
   @Field({
-    name: 'Roles',
+    name: 'roles',
     description:
       'Role or roles assigned to the application user, for granting or denying access to certain areas of farm management.',
     nullable: false,
+    defaultValue: 'worker',
   })
   @IsString({ each: true })
   public roles!: string[];

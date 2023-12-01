@@ -21,7 +21,11 @@ import { GqlModule } from './gql';
     FirestoreModule.forRoot({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        keyFilename: configService.get<string>('SA_KEY'),
+        projectId: configService.get<string>('PROJECT_ID'),
+        credentials: {
+          private_key: configService.get<string>('PRIVATE_KEY'),
+          client_email: configService.get<string>('CLIENT_EMAIL'),
+        },
       }),
       inject: [ConfigService],
     }),

@@ -1,9 +1,13 @@
-import { IsString } from 'class-validator';
+import { Field } from '@nestjs/graphql';
+import { IsOptional, IsString } from 'class-validator';
 
 export class BaseInput {
   @IsString()
-  public createdAt!: string;
+  @Field({ name: 'createdAt', nullable: false })
+  public createdAt: string = new Date().toISOString();
 
   @IsString()
-  public updatedAt!: string;
+  @IsOptional()
+  @Field({ name: 'updatedAt', nullable: true })
+  public updatedAt?: string;
 }
