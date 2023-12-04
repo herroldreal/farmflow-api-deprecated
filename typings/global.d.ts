@@ -22,6 +22,8 @@ export declare global {
 
       JWT_SECRET: string;
       JWT_REFRESH_SECRET: string;
+
+      MAIL_API_KEY: string;
     }
   }
 

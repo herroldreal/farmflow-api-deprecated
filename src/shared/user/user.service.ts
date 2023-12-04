@@ -3,11 +3,14 @@ import { Injectable } from '@nestjs/common';
 import { auth } from 'firebase-admin';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
-import type { User } from './user.interface';
+import { EmailService } from '../../core/email.service';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectPinoLogger('UserService') private readonly logger: PinoLogger) {}
+  constructor(
+    @InjectPinoLogger('UserService') private readonly logger: PinoLogger,
+    private readonly emailService: EmailService,
+  ) {}
 
   public async createAccount(account: Account): Promise<Payload | null> {
     this.logger.info('createAccount()');
@@ -18,14 +21,22 @@ export class UserService {
         phoneNumber: account.phone,
         displayName: account.name,
       });
+      this.logger.info('User created');
 
       const userId = userAccount.uid;
       await auth().setCustomUserClaims(userId, {
         blackListed: account.blackListed,
         roles: account.roles,
       });
+      this.logger.info(`Set custom claims to user ${userId}`);
 
-      // TODO: Generate Email Verification link and send through MailChimp or other service
+      const emailLink = await auth().generateEmailVerificationLink(userAccount.email ?? '');
+      this.logger.info(`Verification Link => ${emailLink}`);
+      await this.emailService.sendVerificationEmail(account.email, {
+        user_name: userAccount.displayName,
+        verification_link: emailLink,
+      });
+
       const user: auth.UserRecord = await auth().getUser(userId);
       return {
         userId: user.uid,
@@ -36,18 +47,5 @@ export class UserService {
     } catch (e: any) {
       throw new Error(e.message);
     }
-  }
-
-  public async fetch(userId: string): Promise<User> {
-    const user = await auth().getUser(userId);
-
-    return {
-      id: user.uid,
-      name: user.displayName,
-      picture: user.photoURL,
-      phone: user.phoneNumber,
-      email: user.email,
-      roles: user.customClaims ? <string[]>user.customClaims['roles'] : <string[]>['owner'],
-    };
   }
 }

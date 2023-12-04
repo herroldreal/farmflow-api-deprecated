@@ -17,12 +17,4 @@ export class AuthController {
     this.logger.info(`User account created => ${JSON.stringify(response, null, 2)}`);
     return response;
   }
-
-  @Post('login')
-  public login(@Body('token') token: string): Payload | null {
-    this.logger.info(`auth/user => ${token}`);
-    const response = this.auth.getPayload(token);
-    this.logger.info(`Response => ${JSON.stringify(response, null, 2)}`);
-    return response;
-  }
 }

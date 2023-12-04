@@ -2,6 +2,7 @@ import { FirestoreModule } from '@common/db/firestore.module';
 import { Module, ValidationPipe } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_PIPE } from '@nestjs/core';
+import { SendGridModule } from '@ntegral/nestjs-sendgrid';
 import { LoggerModule } from 'nestjs-pino';
 
 import { AuthModule } from './auth';
@@ -16,6 +17,15 @@ import { GqlModule } from './gql';
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],
+    }),
+    // Mail Module
+    SendGridModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (cfg: ConfigService) =>
+        Promise.resolve({
+          apiKey: cfg.get<string>('MAIL_API_KEY') ?? '',
+        }),
+      inject: [ConfigService],
     }),
     // Service Modules
     FirestoreModule.forRoot({
