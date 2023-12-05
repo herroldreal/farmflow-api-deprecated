@@ -1,24 +1,30 @@
-import {PassportStrategy} from '@nestjs/passport';
-import {Injectable, UnauthorizedException} from '@nestjs/common';
-import {ExtractJwt, Strategy} from 'passport-firebase-jwt';
-import {auth } from 'firebase-admin';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
+import { auth } from 'firebase-admin';
+import { ExtractJwt, Strategy } from 'passport-firebase-jwt';
+
 import DecodedIdToken = auth.DecodedIdToken;
 
-@Injectable()
-export class FirebaseAuthStrategy extends PassportStrategy(Strategy) {
+import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
-  constructor() {
+import { DebugLog } from '../../debug';
+
+@Injectable()
+@DebugLog('FirebaseAuthStrategy')
+export class FirebaseAuthStrategy extends PassportStrategy(Strategy) {
+  constructor(@InjectPinoLogger() private readonly logger: PinoLogger) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     });
   }
 
-  public validate(token: string): Promise<DecodedIdToken> {
-    return auth()
-      .verifyIdToken(token, true)
-      .catch((error) => {
-        console.warn(error);
-        throw new UnauthorizedException();
-      });
+  @DebugLog('validate()')
+  public async validate(token: string): Promise<DecodedIdToken> {
+    try {
+      return await auth().verifyIdToken(token, true);
+    } catch (error) {
+      this.logger.error(error);
+      throw new UnauthorizedException();
+    }
   }
 }

@@ -4,10 +4,12 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
 import { ReqUser, Roles, RolesGuard } from '../../common';
+import { DebugLog } from '../../debug';
 import { User, Payload } from '../models';
 import { UserService } from '../providers';
 
 @Resolver(() => User)
+@DebugLog('UserResolver')
 export class UserResolver {
   constructor(
     @InjectPinoLogger(UserService.name) private readonly logger: PinoLogger,
@@ -17,14 +19,15 @@ export class UserResolver {
   @Query(() => Payload)
   @UseGuards(RolesGuard)
   @Roles('test')
+  @DebugLog('user()')
   public user(@ReqUser() user: Payload): Payload {
     this.logger.info('user');
     return user;
   }
 
   @Mutation(() => User)
+  @DebugLog('create()')
   public async create(@Args('ownerInput') ownerInput: CreateOwnerInput): Promise<User | undefined> {
-    this.logger.info('create');
     return this.userService.create(ownerInput);
   }
 }

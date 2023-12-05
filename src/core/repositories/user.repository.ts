@@ -1,12 +1,17 @@
 import { CreateOwnerInput } from '@dtos/create-owner.input';
 import { CollectionReference } from '@google-cloud/firestore';
 import { Payload, User } from '@models/index';
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, UseGuards } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
+import { AuthGuard } from '@nestjs/passport';
 import { auth } from 'firebase-admin';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
+import { DebugLog } from '../../debug';
+
 @Injectable()
+@DebugLog('UserRepository')
+@UseGuards(AuthGuard('firebase-jwt'))
 export class UserRepository {
   constructor(
     @InjectPinoLogger(UserRepository.name) private readonly logger: PinoLogger,
@@ -14,8 +19,9 @@ export class UserRepository {
     @Inject(REQUEST) private readonly request: { user: Payload },
   ) {}
 
+  @DebugLog('createOwner()')
   async createOwner(owner: CreateOwnerInput): Promise<User | undefined> {
-    this.logger.info('create');
+    this.logger.info('create owner');
     const userAccount = await auth().getUserByEmail(owner.email);
     owner.id = userAccount.uid;
     const ownerInfo: CreateOwnerInput = {
@@ -34,6 +40,7 @@ export class UserRepository {
     throw new NotFoundException('No owner found with given id');
   }
 
+  @DebugLog('findAllWorkers')
   async findAllWorker(): Promise<User[]> {
     const snapshot = await this.userCollection.where('farmId', '==', this.request.user.farmId).get();
 

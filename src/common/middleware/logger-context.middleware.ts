@@ -2,34 +2,41 @@
 
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import type { Request, Response } from 'express';
+import { auth as Auth } from 'firebase-admin';
 import { PinoLogger } from 'nestjs-pino';
 
-import { AuthService, Payload } from '../../auth';
+import { AuthService } from '../../auth';
 
 @Injectable()
 export class LoggerContextMiddleware implements NestMiddleware {
-  // GraphQL logging uses the apollo plugins.
-  // https://docs.nestjs.com/graphql/plugins
-  // https://docs.nestjs.com/graphql/field-middleware
-
   constructor(
     private readonly logger: PinoLogger,
     private auth: AuthService,
   ) {}
 
-  public use(req: Request, _res: Response, next: () => void): void {
+  public async use(req: Request, _res: Response, next: () => void): Promise<void> {
+    this.logger.info(`========================================================`);
+    // @ts-expect-error
+    this.logger.info(`Request => ${JSON.stringify(req.user, null, 2)}`);
+    this.logger.info(`========================================================`);
+
     const authorization: string | undefined = req.header('authorization');
 
-    const user: Payload | null = authorization?.startsWith('Bearer')
-      ? this.auth.getPayload(authorization.split(' ')[1])
+    const user: Auth.DecodedIdToken = authorization?.startsWith('Bearer')
+      ? await this.auth.getPayload(authorization.split(' ')[1])
       : // @ts-expect-error
-        <Payload>req.user;
+        <Auth.DecodedIdToken>req.user;
 
-    const userId = user?.userId;
-    // for https://github.com/iamolegga/nestjs-pino/issues/608
-    req.customProps = { userId };
-    // Add extra fields to share in logger context
-    this.logger.assign(req.customProps);
+    this.logger.info(`User => ${JSON.stringify(user, null, 2)}`);
+    this.logger.info(`========================================================`);
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (user) {
+      const { uid } = user;
+      // for https://github.com/iamolegga/nestjs-pino/issues/608
+      req.customProps = { uid };
+      // Add extra fields to share in logger context
+      this.logger.assign(req.customProps);
+    }
 
     next();
   }
