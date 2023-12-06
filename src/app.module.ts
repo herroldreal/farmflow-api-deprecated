@@ -31,6 +31,7 @@ import { GqlModule } from './gql';
     FirestoreModule.forRoot({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
+        ignoreUndefinedProperties: true,
         projectId: configService.get<string>('PROJECT_ID'),
         credentials: {
           private_key: configService.get<string>('PRIVATE_KEY'),

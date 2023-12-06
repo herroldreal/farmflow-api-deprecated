@@ -12,7 +12,7 @@ import { UserService } from '../providers';
 @DebugLog('UserResolver')
 export class UserResolver {
   constructor(
-    @InjectPinoLogger(UserService.name) private readonly logger: PinoLogger,
+    @InjectPinoLogger(UserResolver.name) private readonly logger: PinoLogger,
     private userService: UserService,
   ) {}
 
@@ -27,7 +27,7 @@ export class UserResolver {
 
   @Mutation(() => User)
   @DebugLog('create()')
-  public async create(@Args('ownerInput') ownerInput: CreateOwnerInput): Promise<User | undefined> {
+  public async createOwner(@Args('ownerInput') ownerInput: CreateOwnerInput): Promise<User | undefined> {
     return this.userService.create(ownerInput);
   }
 }

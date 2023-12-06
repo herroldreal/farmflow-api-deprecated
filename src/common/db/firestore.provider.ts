@@ -1,3 +1,3 @@
 export const FirestoreDatabaseProvider = 'firestoredb';
 export const FirestoreOptionsProvider = 'firestoreOptions';
-export const FirestoreCollectionProviders: string[] = ['users', 'todos', 'farm'];
+export const FirestoreCollectionProviders: string[] = ['users', 'todos', 'farms'];

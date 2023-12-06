@@ -1,4 +1,10 @@
 // export * from './development';
+import {
+  areaMeasureUnitTypeResolver,
+  milkMeasureUnitTypeResolver,
+  weightMeasurementUnitResolver,
+} from '@resolvers/enum.resolver';
+
 export const config = {
   db: {
     type: 'mysql',
@@ -16,5 +22,10 @@ export const config = {
   },
   graphql: {
     playground: false,
+    resolvers: {
+      AreaMeasurementUnit: areaMeasureUnitTypeResolver,
+      MilkMeasuramentUnit: milkMeasureUnitTypeResolver,
+      WeightMeasurementUnit: weightMeasurementUnitResolver,
+    },
   },
 };

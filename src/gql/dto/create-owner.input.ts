@@ -1,7 +1,6 @@
+import { BaseInput } from '@dtos/base.input';
 import { InputType, Field } from '@nestjs/graphql';
 import { IsString, IsBoolean, ArrayNotEmpty, IsOptional, IsUrl } from 'class-validator';
-
-import { BaseInput } from './base.input';
 
 @InputType()
 export class CreateOwnerInput extends BaseInput {
@@ -28,7 +27,7 @@ export class CreateOwnerInput extends BaseInput {
   @Field({
     name: 'picture',
     nullable: true,
-    description: 'Porfile Picture',
+    description: 'Profile Picture',
     defaultValue: 'https://thefarmflot/default/',
   })
   public picture?: string;

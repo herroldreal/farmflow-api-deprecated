@@ -20,7 +20,10 @@ export class DebugExplorer {
   ) {
     this.addExcludeOption();
 
-    const instanceWrappers: InstanceWrapper[] = [...this.discoveryService.getControllers(), ...this.discoveryService.getProviders()];
+    const instanceWrappers: InstanceWrapper[] = [
+      ...this.discoveryService.getControllers(),
+      ...this.discoveryService.getProviders(),
+    ];
 
     for (const wrapper of instanceWrappers.filter((wrap: InstanceWrapper) => !wrap.isNotMetatype)) {
       const { instance, metatype } = wrapper;

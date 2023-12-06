@@ -1,3 +1,9 @@
+import {
+  areaMeasureUnitTypeResolver,
+  milkMeasureUnitTypeResolver,
+  weightMeasurementUnitResolver,
+} from '@resolvers/enum.resolver';
+
 export const config = {
   db: {
     // entities: [`${__dirname}/../../entity/**/*.{js,ts}`],
@@ -10,6 +16,11 @@ export const config = {
       settings: {
         'request.credentials': 'include',
       },
+    },
+    resolvers: {
+      AreaMeasurementUnit: areaMeasureUnitTypeResolver,
+      MilkMeasuramentUnit: milkMeasureUnitTypeResolver,
+      WeightMeasurementUnit: weightMeasurementUnitResolver,
     },
     autoSchemaFile: true,
     autoTransformHttpErrors: true,
