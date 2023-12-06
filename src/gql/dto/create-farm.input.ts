@@ -82,19 +82,19 @@ export class CreateFarmInput extends BaseInput {
   @IsOptional()
   public countryCode?: string;
 
-  @Field({ name: 'phone', nullable: true })
+  @Field({ name: 'phoneNumber', nullable: true })
   @IsString()
   @IsOptional()
   public phoneNumber?: string;
 
-  @Field({})
+  @Field({ name: 'latitude', nullable: true })
   @IsNumber()
   @IsOptional()
   @Min(-90, { message: 'Latitude must be at least -90' })
   @Max(90, { message: 'Latitude must be at most 90' })
   public latitude?: number;
 
-  @Field({})
+  @Field({ name: 'longitude', nullable: true })
   @IsNumber()
   @IsOptional()
   @Min(-180, { message: 'Longitude must be at least -180' })

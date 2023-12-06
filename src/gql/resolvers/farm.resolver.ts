@@ -11,7 +11,7 @@ import { Response } from '../../core/response.model';
 import { Roles } from '../../core/roles';
 import { DebugLog } from '../../debug';
 
-@Resolver(() => Farm)
+@Resolver()
 @DebugLog('FarmResolver')
 export class FarmResolver {
   constructor(
@@ -19,7 +19,7 @@ export class FarmResolver {
     private farmService: FarmService,
   ) {}
 
-  @Query(() => Farm)
+  @Query(() => Response<Farm[]>)
   @UseGuards(RolesGuard)
   @Role(Roles.ADMIN)
   @DebugLog('getAllFarms()')
@@ -29,7 +29,7 @@ export class FarmResolver {
     return this.farmService.getFarm(fetchFarmInput);
   }
 
-  @Mutation(() => Farm)
+  @Mutation(() => Response<Farm>)
   @DebugLog('createFarm()')
   public async createFarm(@Args('farmInfo') farmInfo: CreateFarmInput): Promise<Response<Farm>> {
     this.logger.info('Create Farm');

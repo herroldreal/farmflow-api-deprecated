@@ -1,7 +1,7 @@
-import { ResponsePagination } from './pagination.model';
-import { Response } from './response.model';
+import { ResponsePagination } from '../pagination.model';
+import { FarmFlowEntity, Response } from '../response.model';
 
-export class ApiResponseBuilder<T> {
+export class ApiResponseBuilder<T extends FarmFlowEntity> {
   private readonly response: Response<T> = {
     data: undefined,
     status: 200,

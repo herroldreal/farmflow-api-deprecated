@@ -8,8 +8,8 @@ import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 import { uuid } from 'uuidv4';
 
 import { DebugLog } from '../../debug';
-import { ApiResponseBuilder } from '../api-response.builder';
 import { PaginationBuilder } from '../pagination.model';
+import { ApiResponseBuilder } from '../response/api-response.builder';
 import { Response } from '../response.model';
 
 @Injectable()
@@ -39,7 +39,7 @@ export class FarmRepository {
       const pagination = new PaginationBuilder().build(snapshot, input.pageSize, nextPageToken);
       return new ApiResponseBuilder<Farm[]>()
         .withStatus(200)
-        .withMessage('')
+        .withMessage('All Farm - Response Successful')
         .withData(result)
         .withPagination(pagination)
         .build();
