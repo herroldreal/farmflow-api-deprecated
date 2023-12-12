@@ -1,19 +1,18 @@
 import { BaseInput } from '@models/base.model';
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { IDField, FilterableField } from '@nestjs-query/query-graphql';
 
 @ObjectType()
 export class Farm extends BaseInput {
-  @IDField(() => ID)
+  @Field(() => ID)
   public ownerId?: string;
 
-  @IDField(() => ID)
+  @Field(() => ID)
   public id?: string;
 
-  @FilterableField()
+  @Field()
   public name!: string;
 
-  @FilterableField()
+  @Field()
   public abbreviation?: string;
 
   @Field({ name: 'purpose' })

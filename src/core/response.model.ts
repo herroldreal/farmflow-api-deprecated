@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention, @typescript-eslint/no-explicit-any*/
 // eslint-disable-next-line max-classes-per-file
 import { Farm } from '@models/farm.model';
 import { ObjectType, Field } from '@nestjs/graphql';
