@@ -1,39 +1,53 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { AuthService } from '@auth/auth.service';
+import { Roles } from '@base/roles';
+import { ROLES_KEY } from '@common/decorators';
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { GqlContextType, GqlExecutionContext } from '@nestjs/graphql';
-import { Request } from 'express';
+import { GqlExecutionContext } from '@nestjs/graphql';
+import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
-import { Payload } from '../../auth';
+import { DebugLog } from '../../debug';
 
 @Injectable()
+@DebugLog('RolesGuard')
 export class RolesGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  constructor(
+    private reflector: Reflector,
+    @InjectPinoLogger() private readonly logger: PinoLogger,
+    private readonly authService: AuthService,
+  ) {}
 
-  public canActivate(context: ExecutionContext): boolean {
-    const roles = this.reflector.getAllAndOverride<string[] | undefined>('roles', [
-      context.getHandler(), // Method Roles
-      context.getClass(), // Controller Roles
+  @DebugLog('RolesGuard - canActive()')
+  public async canActivate(context: ExecutionContext): Promise<boolean> {
+    const requiredRoles = this.reflector.getAllAndOverride<Roles[]>(ROLES_KEY, [
+      context.getHandler(),
+      context.getClass(),
     ]);
 
-    if (!roles) {
-      return true;
-    }
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (!requiredRoles) return true;
+    this.logger.info(`Required Role => ${JSON.stringify(requiredRoles, null, 2)}`);
+    const ctx = GqlExecutionContext.create(context);
 
-    let request: Request;
-    if (context.getType<GqlContextType>() === 'graphql') {
-      const ctx = GqlExecutionContext.create(context).getContext<{ req: Request }>();
-      request = ctx.req;
-    } else {
-      request = context.switchToHttp().getRequest<Request>();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const request = ctx.getContext().req;
+    this.logger.info(`Request Headers => ${request.headers}`);
+    const { authorization } = request.headers;
+    this.logger.info(`Required Role => ${JSON.stringify(authorization, null, 2)}`);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    if (!authorization || authorization.trim() === '') {
+      throw new UnauthorizedException('Please provide a token');
     }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    const authToken = <string>authorization.replace(/bearer/gim, '').trim();
+    this.logger.info(`Token => ${JSON.stringify(requiredRoles, null, 2)}`);
+    const resp = await this.authService.getPayload(authToken);
+    this.logger.info(`User => ${JSON.stringify(resp, null, 2)}`);
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    const user = <Payload | null>request.user;
-    if (!user) {
-      return false;
-    }
-
-    return user.roles.some((role: string) => roles.includes(role));
+    this.logger.info(`Roles => ${resp.roles}`);
+    const hasRole = requiredRoles.some((role) => resp.roles?.includes(role.toLowerCase()));
+    this.logger.info(`Has Role ${hasRole}`);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    return hasRole;
   }
 }

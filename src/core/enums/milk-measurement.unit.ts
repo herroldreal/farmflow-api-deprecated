@@ -1,4 +1,4 @@
-export enum MilkMeasuramentUnit {
+export enum MilkMeasurementUnit {
   LITERS = 'Liters',
   GALLONS = 'Galons',
   BOTTLES = 'Bottles',

@@ -30,8 +30,8 @@ export interface TokenPayload {
 }
 
 export interface Payload {
-  userId: string;
-  farmId?: string;
-  username: string;
-  roles: string[];
+  uid: string;
+  email: string;
+  name: string;
+  roles: string[] | undefined;
 }

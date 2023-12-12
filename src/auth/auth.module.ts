@@ -1,14 +1,12 @@
 import { AuthSerializer } from '@auth/auth.serializer';
 import { AuthService } from '@auth/auth.service';
+import { FirebaseAuthStrategy } from '@auth/strategies/firebase-auth.strategy';
 import { configuration } from '@config/configuration';
 import { Global, Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { JwtModule } from '@nestjs/jwt';
-import { PassportModule } from '@nestjs/passport';
+import { ConfigModule } from '@nestjs/config';
 import { SendGridModule } from '@ntegral/nestjs-sendgrid';
 import { UserModule } from '@shared/user';
-
-import { FirebaseAuthStrategy } from './strategies';
+import { FirebaseAuthModule } from '@whitecloak/nestjs-passport-firebase';
 
 @Global()
 @Module({
@@ -17,18 +15,14 @@ import { FirebaseAuthStrategy } from './strategies';
       isGlobal: true,
       load: [configuration],
     }),
-    JwtModule.registerAsync({
-      useFactory: (config: ConfigService) => ({
-        secret: config.get<string>('jwtSecret'),
-        signOptions: { expiresIn: '1d' },
-      }),
-      inject: [ConfigService],
+    FirebaseAuthModule.register({
+      audience: process.env.AUDIENCE,
+      issuer: process.env.ISSUER,
     }),
-    PassportModule.register({ defaultStrategy: 'firebase-jwt' }),
     SendGridModule,
     UserModule,
   ],
-  providers: [FirebaseAuthStrategy, AuthService, AuthSerializer],
-  exports: [PassportModule, AuthService],
+  providers: [AuthService, AuthSerializer, FirebaseAuthStrategy],
+  exports: [AuthService],
 })
 export class AuthModule {}

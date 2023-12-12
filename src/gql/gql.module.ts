@@ -1,7 +1,9 @@
+import { Farm } from '@models/farm.model';
 import { ApolloDriver } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { GqlModuleOptions, GraphQLModule } from '@nestjs/graphql';
+import { NestjsQueryGraphQLModule } from '@nestjs-query/query-graphql';
 import { FarmRepository } from '@repositories/farm.repository';
 import { UserRepository } from '@repositories/user.repository';
 import { FarmResolver } from '@resolvers/farm.resolver';

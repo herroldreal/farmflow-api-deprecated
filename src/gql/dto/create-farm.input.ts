@@ -3,15 +3,20 @@ import { BaseInput } from '@dtos/base.input';
 import { Field, InputType, registerEnumType } from '@nestjs/graphql';
 import { Transform } from 'class-transformer';
 import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
-import { AreaMeasurementUnit } from 'core/enums/area-measurement-unit';
-import { MilkMeasuramentUnit } from 'core/enums/milk-measurament-unit';
-import { WeightMeasurementUnit } from 'core/enums/weight-measurement-unit';
 
+import { AreaMeasurementUnit } from '../../core/enums/area-measurement.unit';
+import { FarmPurpose } from '../../core/enums/farm-purpose.enum';
+import { MilkMeasurementUnit } from '../../core/enums/milk-measurement.unit';
+import { WeightMeasurementUnit } from '../../core/enums/weight-measurement.unit';
+
+registerEnumType(FarmPurpose, {
+  name: 'FarmPurpose',
+});
 registerEnumType(AreaMeasurementUnit, {
   name: 'AreaMeasurementUnit',
 });
-registerEnumType(MilkMeasuramentUnit, {
-  name: 'MilkMeasuramentUnit',
+registerEnumType(MilkMeasurementUnit, {
+  name: 'MilkMeasurementUnit',
 });
 registerEnumType(WeightMeasurementUnit, {
   name: 'WeightMeasurementUnit',
@@ -21,13 +26,11 @@ registerEnumType(WeightMeasurementUnit, {
 export class CreateFarmInput extends BaseInput {
   @Field({ name: 'ownerId', nullable: true })
   @IsOptional()
-  @IsNotEmpty()
   public ownerId?: string;
 
   @Field({ name: 'id', nullable: true })
   @IsString()
   @IsOptional()
-  @IsNotEmpty()
   public id?: string;
 
   @Field({ name: 'name', nullable: false })
@@ -52,20 +55,25 @@ export class CreateFarmInput extends BaseInput {
   @IsNumber({ allowNaN: false, allowInfinity: false, maxDecimalPlaces: 0 })
   public cattleFarmingArea!: number;
 
-  @Field({ name: 'areaMeasurementUnit', nullable: false })
+  @Field({ name: 'areaMeasurementUnit', nullable: false, defaultValue: AreaMeasurementUnit.HECTARE })
   @Transform(({ value }) => capitalize(`${value}`))
   @IsEnum(AreaMeasurementUnit)
   public areaMeasurementUnit!: AreaMeasurementUnit;
 
-  @Field({ name: 'milkMeasurement', nullable: false })
+  @Field({ name: 'milkMeasurement', nullable: false, defaultValue: MilkMeasurementUnit.GALLONS })
   @Transform(({ value }) => capitalize(`${value}`))
-  @IsEnum(MilkMeasuramentUnit)
-  public milkMeasurement!: MilkMeasuramentUnit;
+  @IsEnum(MilkMeasurementUnit)
+  public milkMeasurement!: MilkMeasurementUnit;
 
-  @Field({ name: 'weightMeasurement', nullable: false })
+  @Field({ name: 'weightMeasurement', nullable: false, defaultValue: WeightMeasurementUnit.KILO })
   @Transform(({ value }) => capitalize(`${value}`))
   @IsEnum(WeightMeasurementUnit)
   public weightMeasurement!: WeightMeasurementUnit;
+
+  @Field({ name: 'farmPurpose', nullable: false, defaultValue: FarmPurpose.DOUBLEPURPOSE })
+  @Transform(({ value }) => capitalize(`${value}`))
+  @IsEnum(FarmPurpose)
+  public farmPurpose!: FarmPurpose;
 
   @Field({ name: 'country', nullable: true })
   @IsString()

@@ -8,9 +8,10 @@ Content-Type: application/json
 	"blackListed": false,
 	"name": "Herrold Real",
 	"roles": [
-		"owner"
+		"owner",
+        "admin"
 	],
-	"password": "HReal92.1",
+	"password": "lalala.1",
 	"phone": "+505 89517503"
 }
 

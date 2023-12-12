@@ -1,5 +1,6 @@
 import {
   areaMeasureUnitTypeResolver,
+  farmPurposeResolver,
   milkMeasureUnitTypeResolver,
   weightMeasurementUnitResolver,
 } from '@resolvers/enum.resolver';
@@ -38,8 +39,9 @@ export const config = {
     playground: false,
     resolvers: {
       AreaMeasurementUnit: areaMeasureUnitTypeResolver,
-      MilkMeasuramentUnit: milkMeasureUnitTypeResolver,
+      MilkMeasurementUnit: milkMeasureUnitTypeResolver,
       WeightMeasurementUnit: weightMeasurementUnitResolver,
+      FarmPurpose: farmPurposeResolver,
     },
   },
 };

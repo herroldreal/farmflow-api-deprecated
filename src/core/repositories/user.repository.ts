@@ -1,9 +1,8 @@
 import { CreateOwnerInput } from '@dtos/create-owner.input';
 import { CollectionReference } from '@google-cloud/firestore';
 import { Payload, User } from '@models/index';
-import { Inject, Injectable, NotFoundException, UseGuards } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
-import { AuthGuard } from '@nestjs/passport';
 import { auth } from 'firebase-admin';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
@@ -11,7 +10,6 @@ import { DebugLog } from '../../debug';
 
 @Injectable()
 @DebugLog('UserRepository')
-@UseGuards(AuthGuard('firebase-jwt'))
 export class UserRepository {
   constructor(
     @InjectPinoLogger(UserRepository.name) private readonly logger: PinoLogger,

@@ -39,10 +39,10 @@ export class UserService {
 
       const user: auth.UserRecord = await auth().getUser(userId);
       return {
-        userId: user.uid,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        roles: user.customClaims?.['roles'] ?? ['owner'],
-        username: user.email ?? user.displayName ?? '',
+        uid: user.uid,
+        roles: <string[]>user.customClaims?.['roles'],
+        name: user.email ?? user.displayName ?? '',
+        email: user.email ?? '',
       };
     } catch (e: any) {
       throw new Error(e.message);

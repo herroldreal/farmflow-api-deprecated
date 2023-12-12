@@ -5,6 +5,7 @@ export class User {
   public id!: string;
   public name!: string;
   public email!: string;
+  public farmId?: string;
   public picture?: string;
   public phone!: string;
   public country?: string;

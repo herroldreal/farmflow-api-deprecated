@@ -19,5 +19,4 @@ export const config = {
     },
     autoLoadEntities: true,
   },
-  foo: 'dev-bar',
 };

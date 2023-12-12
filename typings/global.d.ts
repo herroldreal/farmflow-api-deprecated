@@ -19,6 +19,8 @@ export declare global {
       PROJECT_ID: string;
       PRIVATE_KEY: string;
       CLIENT_EMAIL: string;
+      AUDIENCE: string;
+      ISSUER: string;
 
       JWT_SECRET: string;
       JWT_REFRESH_SECRET: string;
@@ -30,6 +32,7 @@ export declare global {
   namespace Express {
     interface Request {
       customProps: object;
+      user?: User;
     }
 
     // eslint-disable-next-line @typescript-eslint/no-empty-interface

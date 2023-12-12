@@ -16,16 +16,20 @@ export class LoggerContextMiddleware implements NestMiddleware {
 
   public async use(req: Request, _res: Response, next: () => void): Promise<void> {
     this.logger.info(`========================================================`);
-    // @ts-expect-error
     this.logger.info(`Request => ${JSON.stringify(req.user, null, 2)}`);
     this.logger.info(`========================================================`);
 
     const authorization: string | undefined = req.header('authorization');
 
-    const user: Auth.DecodedIdToken = authorization?.startsWith('Bearer')
-      ? await this.auth.getPayload(authorization.split(' ')[1])
-      : // @ts-expect-error
-        <Auth.DecodedIdToken>req.user;
+    let user: Auth.DecodedIdToken;
+    if (authorization?.startsWith('Bearer')) {
+      const token = authorization.split(' ')[1];
+      user = await this.auth.getPayload(token);
+      this.logger.info(`Token => ${token}`);
+    } else {
+      // @ts-expect-error
+      user = req.user;
+    }
 
     this.logger.info(`User => ${JSON.stringify(user, null, 2)}`);
     this.logger.info(`========================================================`);
