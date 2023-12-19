@@ -72,10 +72,12 @@
 		"pino": "8.16.2",
 		"pino-http": "8.5.1",
 		"reflect-metadata": "0.1.13",
-		"rxjs": "7.8.1"
+		"rxjs": "7.8.1",
+		"typesaurus": "7.2.0"
 	},
 	"devDependencies": {
 		"@compodoc/compodoc": "1.1.23",
+		"@firebase/firestore-types": "3.0.0",
 		"@golevelup/ts-jest": "0.4.0",
 		"@nestjs/cli": "10.2.1",
 		"@nestjs/schematics": "10.0.3",

@@ -1,12 +1,12 @@
 import { CreateOwnerInput } from '@dtos/create-owner.input';
 import { CollectionReference } from '@google-cloud/firestore';
-import { Payload, User } from '@models/index';
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { auth } from 'firebase-admin';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
 import { DebugLog } from '../../debug';
+import { Payload, User } from '../models/index';
 
 @Injectable()
 @DebugLog('UserRepository')

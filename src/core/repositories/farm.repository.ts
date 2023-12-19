@@ -1,9 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
+import { Filtering } from '@decorators/filtering.decorator';
+import { Pagination } from '@decorators/pagination.decorator';
+import { Sorting } from '@decorators/sorting.decorator';
 import { CreateFarmInput } from '@dtos/create-farm.input';
-import { FetchFarmInput } from '@dtos/fetch-farm.input';
 import { LinkFarmOwnerInput } from '@dtos/link-farm-owner.input';
-import { CollectionReference, QueryDocumentSnapshot } from '@google-cloud/firestore';
+import { Collections } from '@enums/collections';
+import { CollectionReference, QueryDocumentSnapshot, QuerySnapshot } from '@google-cloud/firestore';
 import { autoId } from '@google-cloud/firestore/build/src/util';
 import { Farm } from '@models/farm.model';
 import { User } from '@models/user.model';
@@ -20,40 +21,60 @@ import { Response } from '../response.model';
 export class FarmRepository {
   constructor(
     @InjectPinoLogger(FarmRepository.name) private readonly logger: PinoLogger,
-    @Inject('users') private userCollection: CollectionReference<User>,
-    @Inject('farms') private farmCollection: CollectionReference<Farm>,
+    @Inject(Collections.USERS) private userCollection: CollectionReference<User>,
+    @Inject(Collections.FARMS) private farmCollection: CollectionReference<Farm>,
   ) {}
 
-  async getAllFarms(): Promise<Response<Farm[]>> {
-    this.logger.info(`Get all farm in DB - Admin purpose`);
-    const query = this.farmCollection.orderBy('name');
+  @DebugLog('getAllFarms()')
+  async getAllFarms(pagination: Pagination, sort?: Sorting, filter?: Filtering): Promise<Response<Farm[]>> {
+    const { lastDoc, limit } = pagination;
+    let query = this.farmCollection.limit(limit);
 
-    await query.get();
+    if (sort) query.orderBy(sort.property, sort.direction);
+    if (filter) query = query.where(filter.property, filter.rule, filter.value);
+    if (lastDoc) {
+      const startAfterDoc = await this.farmCollection.doc(lastDoc).get();
+      query = query.startAfter(startAfterDoc);
+    }
 
-    return ApiResponseBuilder.success(200, 'Ok', new Array<Farm>());
+    const data: QuerySnapshot = await query.get();
+    const snapshot: QuerySnapshot = await this.farmCollection.get();
+    if (!data.empty) {
+      const result = <Farm[]>data.docs.map((doc: QueryDocumentSnapshot) => doc.data());
+      const lastId = data.docs.length === limit ? data.docs[limit - 1].id : undefined;
+      const resultPagination = new PaginationBuilder().build(snapshot, limit, lastId);
+
+      return ApiResponseBuilder.success(200, 'Informacion obtenida correctamente', result, resultPagination);
+    }
+    return ApiResponseBuilder.notFound();
   }
 
   @DebugLog('getFarm()')
-  async getFarm(input: FetchFarmInput): Promise<Response<Farm[]>> {
-    this.logger.info(`Get  ${JSON.stringify(input, null, 2)}`);
-    let query = this.farmCollection.orderBy('name');
+  async getFarm(filter: Filtering): Promise<Response<Farm>> {
+    this.logger.info(`Get  ${JSON.stringify(filter, null, 2)}`);
+    const doc = await this.farmCollection.doc(filter.value).get();
+    if (doc.exists) {
+      const result = doc.data();
+      this.logger.info(`Farm => ${JSON.stringify(result, null, 2)}`);
 
-    if (input.lastId) {
-      const startAfterDoc = await this.farmCollection.doc(input.lastId).get();
-      query = query.startAfter(startAfterDoc);
+      return ApiResponseBuilder.success(200, 'Informacion obtenida correctamente', result);
     }
-    this.logger.error(`Input ${JSON.stringify(input, null, 2)}`);
+    return ApiResponseBuilder.notFound();
+  }
 
-    const snapshot = await query.limit(input.pageSize ?? 10).get();
-    const result = <Farm[]>snapshot.docs.map((doc: QueryDocumentSnapshot) => doc.data());
-    this.logger.info(`[Farms] => ${JSON.stringify(result, null, 2)}`);
-    const nextPageToken = snapshot.docs.length === input.pageSize ? snapshot.docs[input.pageSize - 1].id : null;
-
+  @DebugLog('getFarmsByOwner')
+  async getFarmByOwner(sort: Sorting, filter: Filtering): Promise<Response<Farm[]>> {
+    this.logger.info(`Get  ${JSON.stringify(filter, null, 2)}`);
+    const snapshot = await this.farmCollection
+      .limit(10)
+      .orderBy(sort.property, sort.direction)
+      .where(filter.property, filter.rule, filter.value)
+      .get();
     if (!snapshot.empty) {
-      this.logger.info(`Is Empty => ${snapshot.empty}`);
-      const pagination = new PaginationBuilder().build(snapshot, input.pageSize ?? 10, nextPageToken);
-      this.logger.info(`Pagination => ${JSON.stringify(pagination, null, 2)}`);
-      return ApiResponseBuilder.success(200, 'Informacion obtenida correctamente', result, pagination);
+      const result = <Farm[]>snapshot.docs.map((doc: QueryDocumentSnapshot) => doc.data());
+      this.logger.info(`[Farm] => ${JSON.stringify(result, null, 2)}`);
+
+      return ApiResponseBuilder.success(200, 'Informacion obtenida correctamente', result);
     }
     return ApiResponseBuilder.notFound();
   }

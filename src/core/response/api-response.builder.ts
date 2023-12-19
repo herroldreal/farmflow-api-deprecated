@@ -1,8 +1,9 @@
-import { ResponsePagination } from '../pagination.model';
+/* eslint-disable @typescript-eslint/no-redundant-type-constituents, @typescript-eslint/no-explicit-any, max-classes-per-file */
+import { Pagination } from '../pagination.model';
 import { Response } from '../response.model';
 
 export class ApiResponseBuilder {
-  static notFound<T>(): Response<T> {
+  static notFound() {
     return {
       message: 'Datos no encontrados',
       data: undefined,
@@ -11,7 +12,7 @@ export class ApiResponseBuilder {
     };
   }
 
-  static withError<T>(code: number, message: string): Response<T> {
+  static withError(code: number, message: string) {
     return {
       message,
       data: undefined,
@@ -24,16 +25,16 @@ export class ApiResponseBuilder {
     status: number,
     message: string,
     data: T | undefined,
-    pagination: ResponsePagination | undefined = undefined,
+    pagination: Pagination | undefined = undefined,
   ): Response<T> {
     return {
-      message,
-      data: {
-        result: data,
-        pagination,
-      },
       success: true,
       status,
+      message,
+      data: {
+        pagination,
+        result: data,
+      },
     };
   }
 }

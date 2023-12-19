@@ -1,0 +1,70 @@
+import { Roles } from '@base/roles';
+import { Public, Role } from '@common/decorators';
+import { RolesGuard } from '@common/guards';
+import { Filtering, FilteringParams } from '@decorators/filtering.decorator';
+import { Pagination, PaginationParams } from '@decorators/pagination.decorator';
+import { Sorting, SortingParams } from '@decorators/sorting.decorator';
+import { CreateFarmInput } from '@dtos/create-farm.input';
+import { LinkFarmOwnerInput } from '@dtos/link-farm-owner.input';
+import { Farm } from '@models/index';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { FirebaseAuthGuard } from '@whitecloak/nestjs-passport-firebase';
+import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
+
+import { Response } from '../../core/response.model';
+import { FarmService } from '../../core/services/farm.service';
+
+@Controller('farm')
+@UseGuards(FirebaseAuthGuard)
+export class FarmController {
+  constructor(
+    @InjectPinoLogger(FarmController.name) private readonly logger: PinoLogger,
+    private farmService: FarmService,
+  ) {}
+
+  @Get()
+  @Role(Roles.ADMIN)
+  @UseGuards(RolesGuard)
+  public async getAll(
+    @PaginationParams() paginationParams: Pagination,
+    @SortingParams(['name']) sort: Sorting,
+    @FilteringParams(['name']) filter: Filtering,
+  ): Promise<Response<Farm[]>> {
+    return this.farmService.getAllFarms(paginationParams, sort, filter);
+  }
+
+  @Post('worker')
+  @Role(Roles.ADMIN, Roles.OWNER)
+  @UseGuards(RolesGuard)
+  public async testWorker(): Promise<string> {
+    return 'Hola, soy un trabajador y solo yo puedo entrar aca';
+  }
+
+  @Get('getById')
+  async getFarmById(@FilteringParams(['id']) filter: Filtering): Promise<Response<Farm>> {
+    return this.farmService.getFarmById(filter);
+  }
+
+  @Get('getByOwner')
+  async getFarmByOwnerId(
+    @SortingParams(['ownerId', 'purpose']) sort: Sorting,
+    @FilteringParams(['ownerId']) filter: Filtering,
+  ): Promise<Response<Farm[]>> {
+    return this.farmService.getFarmByOwnerId(sort, filter);
+  }
+
+  @Post()
+  @Public()
+  async createFarm(@Body() data: CreateFarmInput): Promise<Response<Farm>> {
+    this.logger.info('Creating farm');
+    return this.farmService.createFarm(data);
+  }
+
+  @Post('link')
+  @Role(Roles.OWNER, Roles.ADMIN)
+  @UseGuards(RolesGuard)
+  async linkOwner(@Body() data: LinkFarmOwnerInput): Promise<Response<boolean>> {
+    this.logger.info(`Linking owner ${data.ownerId} with farm ${data.farmId}`);
+    return this.farmService.linkOwnerWithFarm(data);
+  }
+}

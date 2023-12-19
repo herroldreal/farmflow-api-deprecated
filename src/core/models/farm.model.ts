@@ -1,5 +1,6 @@
-import { BaseInput } from '@models/base.model';
 import { ObjectType, Field, ID } from '@nestjs/graphql';
+
+import { BaseInput } from './base.model';
 
 @ObjectType()
 export class Farm extends BaseInput {

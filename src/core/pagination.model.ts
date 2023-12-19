@@ -3,39 +3,31 @@ import { QuerySnapshot } from '@google-cloud/firestore';
 import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class ResponsePagination {
-  @Field({ name: 'totalItems' })
-  public totalItems!: number;
+export class Pagination {
+  @Field({ name: 'total' })
+  public total!: number;
 
-  @Field({ name: 'currentPage' })
-  public currentPage!: number;
-
-  @Field({ name: 'pageSize' })
-  public pageSize!: number;
+  @Field({ name: 'size' })
+  public size!: number;
 
   @Field({ name: 'totalPages' })
   public totalPages!: number;
 
+  @Field({ name: 'lastIdCursor' })
+  public lastIdCursor?: string;
+
   @Field({ name: 'hasNextPage' })
   public hasNextPage!: boolean;
-
-  @Field({ name: 'hasPreviousPage' })
-  public hasPreviousPage!: boolean;
 }
 
 export class PaginationBuilder {
-  public build(snapshot: QuerySnapshot, size: number, startAfterDocId: string | null = null): ResponsePagination {
-    const actualPage = startAfterDocId
-      ? Math.ceil(snapshot.docs.findIndex((doc) => doc.id === startAfterDocId) / size) + 1
-      : 1;
-
+  public build(snapshot: QuerySnapshot, size: number, lastId: string | undefined = undefined): Pagination {
     return {
-      totalItems: snapshot.size,
-      currentPage: actualPage,
-      pageSize: size,
+      total: snapshot.size,
+      size,
+      lastIdCursor: lastId,
       totalPages: Math.ceil(snapshot.size / size),
       hasNextPage: snapshot.size > size,
-      hasPreviousPage: !!startAfterDocId,
     };
   }
 }

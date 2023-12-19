@@ -9,5 +9,5 @@ export class BaseInput {
   @IsString()
   @IsOptional()
   @Field({ name: 'updatedAt', nullable: true })
-  public updatedAt?: string;
+  public updatedAt?: string = new Date().toISOString();
 }

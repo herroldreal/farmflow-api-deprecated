@@ -9,7 +9,7 @@ import { AuthModule } from './auth';
 import { BaseModule } from './base';
 import { CommonModule, ExceptionsFilter } from './common';
 import { configuration, loggerOptions } from './config';
-import { GqlModule } from './gql';
+import { RestModule } from './rest';
 
 @Module({
   imports: [
@@ -18,7 +18,6 @@ import { GqlModule } from './gql';
       isGlobal: true,
       load: [configuration],
     }),
-    // Mail Module
     SendGridModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (cfg: ConfigService) =>
@@ -27,7 +26,6 @@ import { GqlModule } from './gql';
         }),
       inject: [ConfigService],
     }),
-    // Service Modules
     FirestoreModule.forRoot({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -40,10 +38,10 @@ import { GqlModule } from './gql';
       }),
       inject: [ConfigService],
     }),
-    AuthModule, // Global for Middleware
-    CommonModule, // Global
+    AuthModule,
+    CommonModule,
     BaseModule,
-    GqlModule,
+    RestModule,
   ],
   providers: [
     { provide: APP_FILTER, useClass: ExceptionsFilter },

@@ -4,7 +4,7 @@ Accept: : application/json
 Content-Type: application/json
 
 {
-	"email": "realherrold@gmail.com",
+	"email": "hhrb2011@hotmail.com",
 	"blackListed": false,
 	"name": "Herrold Real",
 	"roles": [
@@ -12,7 +12,7 @@ Content-Type: application/json
         "admin"
 	],
 	"password": "lalala.1",
-	"phone": "+505 89517503"
+	"phone": "+505 81104517"
 }
 
 ### Verify token

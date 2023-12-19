@@ -1,9 +1,9 @@
 import { CreateOwnerInput } from '@dtos/create-owner.input';
+import { User } from '@models/index';
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from '@repositories/user.repository';
 
 import { DebugLog } from '../../debug';
-import { User } from '../models';
 
 @Injectable()
 @DebugLog('Providers.UserService')

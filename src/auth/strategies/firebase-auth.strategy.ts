@@ -1,7 +1,8 @@
-import { User } from '@models/user.model';
 import { DecodedIdToken, FirebaseStrategy } from '@whitecloak/nestjs-passport-firebase';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 import * as process from 'process';
+
+import { User } from '../../core/models/user.model';
 
 export class FirebaseAuthStrategy extends FirebaseStrategy {
   constructor(@InjectPinoLogger() private readonly logger: PinoLogger) {

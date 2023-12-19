@@ -1,13 +1,13 @@
 import { capitalize } from '@common/utils/string.utils';
-import { BaseInput } from '@dtos/base.input';
 import { Field, InputType, registerEnumType } from '@nestjs/graphql';
 import { Transform } from 'class-transformer';
 import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
 
-import { AreaMeasurementUnit } from '../../core/enums/area-measurement.unit';
-import { FarmPurpose } from '../../core/enums/farm-purpose.enum';
-import { MilkMeasurementUnit } from '../../core/enums/milk-measurement.unit';
-import { WeightMeasurementUnit } from '../../core/enums/weight-measurement.unit';
+import { BaseInput } from './base.input';
+import { AreaMeasurementUnit } from '../enums/area-measurement.unit';
+import { FarmPurpose } from '../enums/farm-purpose.enum';
+import { MilkMeasurementUnit } from '../enums/milk-measurement.unit';
+import { WeightMeasurementUnit } from '../enums/weight-measurement.unit';
 
 registerEnumType(FarmPurpose, {
   name: 'FarmPurpose',

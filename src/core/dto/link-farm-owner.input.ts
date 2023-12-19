@@ -1,6 +1,7 @@
-import { BaseInput } from '@dtos/base.input';
 import { Field, InputType } from '@nestjs/graphql';
-import { IsAlphanumeric, IsNotEmpty, IsUUID } from 'class-validator';
+import { IsAlphanumeric, IsNotEmpty } from 'class-validator';
+
+import { BaseInput } from './base.input';
 
 @InputType()
 export class LinkFarmOwnerInput extends BaseInput {
@@ -10,7 +11,7 @@ export class LinkFarmOwnerInput extends BaseInput {
   public ownerId!: string;
 
   @Field({ name: 'farmId', nullable: false })
-  @IsUUID()
+  @IsAlphanumeric()
   @IsNotEmpty()
   public farmId!: string;
 }
