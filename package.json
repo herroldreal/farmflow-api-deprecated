@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"description": "Cattle Farm Management API App",
 	"private": true,
-	"main": "dist/app.js",
+	"main": "dist/src/app.js",
 	"author": {
 		"email": "realherrold@gmail.com",
 		"name": "Herrold H. Real",

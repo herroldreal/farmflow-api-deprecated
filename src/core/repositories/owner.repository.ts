@@ -14,6 +14,7 @@ import { Payload, User } from '../models/index';
 @Injectable()
 @DebugLog('OwnerRepository')
 export class OwnerRepository {
+  // eslint-disable-next-line max-params
   constructor(
     @InjectPinoLogger(OwnerRepository.name) private readonly logger: PinoLogger,
     @InjectMapper() private readonly mapper: Mapper,

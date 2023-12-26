@@ -3,6 +3,9 @@ import { Pagination } from '@decorators/pagination.decorator';
 import { Sorting } from '@decorators/sorting.decorator';
 import { FarmDto } from '@dtos/farm.dto';
 import { LinkFarmOwnerDto } from '@dtos/link-farm-owner.dto';
+import { LinkFarmWorkerDto } from '@dtos/link-farm-worker.dto';
+import { UnlinkFarmOwnerDto } from '@dtos/ublink-farm-owner.dto';
+import { UnlinkFarmWorkerDto } from '@dtos/unlink-farm-worker.dto';
 import { Farm } from '@models/index';
 import { Injectable } from '@nestjs/common';
 import { FarmRepository } from '@repositories/farm.repository';
@@ -50,7 +53,22 @@ export class FarmService {
   }
 
   @DebugLog('linkOwnerWithFarm()')
-  public async linkOwnerWithFarm(data: LinkFarmOwnerDto): Promise<Response<boolean>> {
+  public async linkOwner(data: LinkFarmOwnerDto): Promise<Response<boolean>> {
     return this.repository.linkOwnerWithFarm(data);
+  }
+
+  @DebugLog('unlinkOwner')
+  public async unlinkOwner(data: UnlinkFarmOwnerDto): Promise<Response<boolean>> {
+    return this.repository.unlinkOwner(data);
+  }
+
+  @DebugLog('linkWorker')
+  public async linkWorker(data: LinkFarmWorkerDto): Promise<Response<boolean>> {
+    return this.repository.linkWorker(data);
+  }
+
+  @DebugLog('unlinkWorker')
+  public async unlinkWorker(data: UnlinkFarmWorkerDto): Promise<Response<boolean>> {
+    return this.repository.unlinkWorker(data);
   }
 }

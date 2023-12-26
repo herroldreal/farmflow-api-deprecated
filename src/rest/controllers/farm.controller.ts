@@ -6,8 +6,11 @@ import { Pagination, PaginationParams } from '@decorators/pagination.decorator';
 import { Sorting, SortingParams } from '@decorators/sorting.decorator';
 import { FarmDto } from '@dtos/farm.dto';
 import { LinkFarmOwnerDto } from '@dtos/link-farm-owner.dto';
+import { LinkFarmWorkerDto } from '@dtos/link-farm-worker.dto';
+import { UnlinkFarmOwnerDto } from '@dtos/ublink-farm-owner.dto';
+import { UnlinkFarmWorkerDto } from '@dtos/unlink-farm-worker.dto';
 import { Farm } from '@models/index';
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, UseGuards } from '@nestjs/common';
 import { FarmService } from '@services/farm.service';
 import { FirebaseAuthGuard } from '@whitecloak/nestjs-passport-firebase';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
@@ -53,11 +56,34 @@ export class FarmController {
     return this.farmService.createFarm(data);
   }
 
-  @Post('link')
+  @Patch('linkOwner')
   @Role(Roles.OWNER, Roles.ADMIN)
   @UseGuards(RolesGuard)
   async linkOwner(@Body() data: LinkFarmOwnerDto): Promise<Response<boolean>> {
     this.logger.info(`Linking owner ${data.ownerId} with farm ${data.farmId}`);
-    return this.farmService.linkOwnerWithFarm(data);
+    return this.farmService.linkOwner(data);
+  }
+
+  @Patch('unlinkOwner')
+  @Role(Roles.OWNER, Roles.ADMIN)
+  @UseGuards(RolesGuard)
+  async unlinkOwner(@Body() data: UnlinkFarmOwnerDto): Promise<Response<boolean>> {
+    return this.farmService.unlinkOwner(data);
+  }
+
+  @Patch('linkWorker')
+  @Role(Roles.OWNER, Roles.ADMIN)
+  @UseGuards(RolesGuard)
+  async linkWorker(@Body() data: LinkFarmWorkerDto): Promise<Response<boolean>> {
+    this.logger.info(`Linking owner ${data.workerId} with farm ${data.farmId}`);
+    return this.farmService.linkWorker(data);
+  }
+
+  @Patch('unlinkWorker')
+  @Role(Roles.OWNER, Roles.ADMIN)
+  @UseGuards(RolesGuard)
+  async unlinkWorker(@Body() data: UnlinkFarmWorkerDto): Promise<Response<boolean>> {
+    this.logger.info(`Linking owner ${data.workerId} with farm ${data.farmId}`);
+    return this.farmService.unlinkWorker(data);
   }
 }

@@ -45,6 +45,9 @@ export class Farm extends BaseModel {
   @AutoMap()
   public phoneNumber?: string;
 
+  @AutoMap(() => Array<string>)
+  public workers?: string[];
+
   @AutoMap()
   public latitude?: number;
 

@@ -10,7 +10,8 @@ import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Max, Min } from 'cl
 export class FarmDto {
   @AutoMap()
   @IsOptional()
-  public ownerId?: string;
+  @AutoMap(() => Array<string>)
+  public owners?: string[];
 
   @AutoMap()
   @IsString()

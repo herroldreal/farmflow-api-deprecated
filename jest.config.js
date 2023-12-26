@@ -29,13 +29,13 @@ module.exports = {
   },
   setupFilesAfterEnv: ['./tests/setup.ts'],
   collectCoverage: false,
-  collectCoverageFrom: ['src/**/*.ts', '!**/src/config/envs/test.ts', '!**/node_modules/**', '!**/tests/**/*.ts'],
+  collectCoverageFrom: ['src/**/*.ts', '!**/node_modules/**', '!**/tests/**/*.ts'],
   coverageThreshold: {
     global: {
       branches: 70, // 70
-      functions: 86, // 85
-      lines: 78, // 80
-      statements: 77, // 80
+      functions: 85, // 85
+      lines: 80, // 80
+      statements: 80, // 80
     },
   },
 };

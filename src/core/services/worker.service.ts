@@ -27,6 +27,20 @@ export class WorkerService {
     return response;
   }
 
+  @DebugLog('getAllWorkerByFarm')
+  public async getAllWorkerByFarm(
+    pagination: Pagination,
+    sort: Sorting,
+    filter: Filtering,
+  ): Promise<Response<WorkerDto[]>> {
+    return this.repository.getAllWorkerByFarmId(pagination, sort, filter);
+  }
+
+  @DebugLog('getWorker')
+  public async getWorker(filter: Filtering): Promise<Response<WorkerDto>> {
+    return this.repository.getWorker(filter);
+  }
+
   @DebugLog('createWorker()')
   public async createWorker(data: WorkerDto): Promise<Response<WorkerDto>> {
     return this.repository.createWorker(data);

@@ -13,8 +13,8 @@ export class User extends BaseModel {
   @AutoMap()
   public email!: string;
 
-  @AutoMap()
-  public farmId?: string;
+  @AutoMap(() => Array<string>)
+  public farms?: string[];
 
   @AutoMap()
   public picture?: string;
