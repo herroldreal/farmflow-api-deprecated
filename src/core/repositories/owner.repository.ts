@@ -1,7 +1,10 @@
-import { CreateOwnerInput } from '@dtos/create-owner.input';
+import { Mapper } from '@automapper/core';
+import { CreateOwnerDto } from '@dtos/create-owner.dto';
 import { CollectionReference } from '@google-cloud/firestore';
+import { Owner } from '@models/owner.model';
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
+import { InjectMapper } from '@timonmasberg/automapper-nestjs';
 import { auth } from 'firebase-admin';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
@@ -9,20 +12,22 @@ import { DebugLog } from '../../debug';
 import { Payload, User } from '../models/index';
 
 @Injectable()
-@DebugLog('UserRepository')
-export class UserRepository {
+@DebugLog('OwnerRepository')
+export class OwnerRepository {
   constructor(
-    @InjectPinoLogger(UserRepository.name) private readonly logger: PinoLogger,
+    @InjectPinoLogger(OwnerRepository.name) private readonly logger: PinoLogger,
+    @InjectMapper() private readonly mapper: Mapper,
     @Inject('users') private userCollection: CollectionReference<User>,
     @Inject(REQUEST) private readonly request: { user: Payload },
   ) {}
 
   @DebugLog('createOwner()')
-  async createOwner(owner: CreateOwnerInput): Promise<User | undefined> {
+  async createOwner(data: CreateOwnerDto): Promise<Owner | undefined> {
     this.logger.info('create owner');
-    const userAccount = await auth().getUserByEmail(owner.email);
-    owner.id = userAccount.uid;
-    const ownerInfo: CreateOwnerInput = {
+    const userAccount = await auth().getUserByEmail(data.email);
+    data.id = userAccount.uid;
+    const owner = this.mapper.map(data, CreateOwnerDto, Owner);
+    const ownerInfo: Owner = {
       ...owner,
       createdAt: new Date().toISOString(),
     };

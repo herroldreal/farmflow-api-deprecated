@@ -6,13 +6,13 @@ import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 import { EmailService } from '../../core/email.service';
 
 @Injectable()
-export class UserService {
+export class AccountService {
   constructor(
-    @InjectPinoLogger('UserService') private readonly logger: PinoLogger,
+    @InjectPinoLogger('AccountService') private readonly logger: PinoLogger,
     private readonly emailService: EmailService,
   ) {}
 
-  public async createAccount(account: Account): Promise<Payload | null> {
+  public async createAccount(account: Account): Promise<Payload> {
     this.logger.info('createAccount()');
     try {
       const userAccount = await auth().createUser({
@@ -45,7 +45,7 @@ export class UserService {
         email: user.email ?? '',
       };
     } catch (e: any) {
-      throw new Error(e.message);
+      return Promise.reject(new Error(e.message));
     }
   }
 }

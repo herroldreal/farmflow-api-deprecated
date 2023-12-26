@@ -1,17 +1,17 @@
-import { CreateOwnerInput } from '@dtos/create-owner.input';
+import { CreateOwnerDto } from '@dtos/create-owner.dto';
 import { User } from '@models/index';
 import { Injectable } from '@nestjs/common';
-import { UserRepository } from '@repositories/user.repository';
+import { OwnerRepository } from '@repositories/owner.repository';
 
 import { DebugLog } from '../../debug';
 
 @Injectable()
-@DebugLog('Providers.UserService')
+@DebugLog('UserService')
 export class UserService {
-  constructor(private readonly repository: UserRepository) {}
+  constructor(private readonly repository: OwnerRepository) {}
 
   @DebugLog('create()')
-  public async create(data: CreateOwnerInput): Promise<User | undefined> {
+  public async create(data: CreateOwnerDto): Promise<User | undefined> {
     return this.repository.createOwner(data);
   }
 }

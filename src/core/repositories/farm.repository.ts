@@ -1,14 +1,16 @@
+import { Mapper } from '@automapper/core';
 import { Filtering } from '@decorators/filtering.decorator';
 import { Pagination } from '@decorators/pagination.decorator';
 import { Sorting } from '@decorators/sorting.decorator';
-import { CreateFarmInput } from '@dtos/create-farm.input';
-import { LinkFarmOwnerInput } from '@dtos/link-farm-owner.input';
+import { FarmDto } from '@dtos/farm.dto';
+import { LinkFarmOwnerDto } from '@dtos/link-farm-owner.dto';
 import { Collections } from '@enums/collections';
 import { CollectionReference, QueryDocumentSnapshot, QuerySnapshot } from '@google-cloud/firestore';
 import { autoId } from '@google-cloud/firestore/build/src/util';
 import { Farm } from '@models/farm.model';
 import { User } from '@models/user.model';
 import { Inject, Injectable } from '@nestjs/common';
+import { InjectMapper } from '@timonmasberg/automapper-nestjs';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
 import { DebugLog } from '../../debug';
@@ -21,6 +23,7 @@ import { Response } from '../response.model';
 export class FarmRepository {
   constructor(
     @InjectPinoLogger(FarmRepository.name) private readonly logger: PinoLogger,
+    @InjectMapper() private readonly mapper: Mapper,
     @Inject(Collections.USERS) private userCollection: CollectionReference<User>,
     @Inject(Collections.FARMS) private farmCollection: CollectionReference<Farm>,
   ) {}
@@ -80,12 +83,13 @@ export class FarmRepository {
   }
 
   @DebugLog('createFarm()')
-  async createFarm(data: CreateFarmInput): Promise<Response<Farm>> {
-    this.logger.info(`Create farm with data ${JSON.stringify(data, null, 2)}`);
+  async createFarm(data: FarmDto): Promise<Response<Farm>> {
+    const farm = this.mapper.map(data, FarmDto, Farm);
+    this.logger.info(`Create farm with data ${JSON.stringify(farm, null, 2)}`);
 
     const farmId = autoId();
-    const farmInfo: CreateFarmInput = {
-      ...data,
+    const farmInfo: Farm = {
+      ...farm,
       id: farmId,
       createdAt: new Date().toISOString(),
     };
@@ -97,7 +101,7 @@ export class FarmRepository {
   }
 
   @DebugLog('linkOwnerWithFarm()')
-  async linkOwnerWithFarm(data: LinkFarmOwnerInput): Promise<Response<boolean>> {
+  async linkOwnerWithFarm(data: LinkFarmOwnerDto): Promise<Response<boolean>> {
     this.logger.info(`Link owner ${data.ownerId} with farm ${data.farmId}`);
 
     const farmRef = this.farmCollection.doc(data.farmId);

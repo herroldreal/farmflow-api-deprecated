@@ -1,8 +1,10 @@
+import { classes } from '@automapper/classes';
 import { FirestoreModule } from '@common/db/firestore.module';
 import { Module, ValidationPipe } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_PIPE } from '@nestjs/core';
 import { SendGridModule } from '@ntegral/nestjs-sendgrid';
+import { AutomapperModule } from '@timonmasberg/automapper-nestjs';
 import { LoggerModule } from 'nestjs-pino';
 
 import { AuthModule } from './auth';
@@ -37,6 +39,9 @@ import { RestModule } from './rest';
         },
       }),
       inject: [ConfigService],
+    }),
+    AutomapperModule.forRoot({
+      strategyInitializer: classes(),
     }),
     AuthModule,
     CommonModule,

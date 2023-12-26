@@ -1,5 +1,5 @@
 export enum AreaMeasurementUnit {
-  HECTARE = 'Hectare',
-  BLOCK = 'Block',
-  SQUAREMETERS = 'Square Meters',
+  HECTARE = 'Hectarea',
+  BLOCK = 'Manzana',
+  SQUAREMETERS = 'Metros Cuadrados',
 }

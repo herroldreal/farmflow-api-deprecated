@@ -1,8 +1,8 @@
 import { Filtering } from '@decorators/filtering.decorator';
 import { Pagination } from '@decorators/pagination.decorator';
 import { Sorting } from '@decorators/sorting.decorator';
-import { CreateFarmInput } from '@dtos/create-farm.input';
-import { LinkFarmOwnerInput } from '@dtos/link-farm-owner.input';
+import { FarmDto } from '@dtos/farm.dto';
+import { LinkFarmOwnerDto } from '@dtos/link-farm-owner.dto';
 import { Farm } from '@models/index';
 import { Injectable } from '@nestjs/common';
 import { FarmRepository } from '@repositories/farm.repository';
@@ -45,12 +45,12 @@ export class FarmService {
   }
 
   @DebugLog('createFarm()')
-  public async createFarm(data: CreateFarmInput): Promise<Response<Farm>> {
+  public async createFarm(data: FarmDto): Promise<Response<Farm>> {
     return this.repository.createFarm(data);
   }
 
   @DebugLog('linkOwnerWithFarm()')
-  public async linkOwnerWithFarm(data: LinkFarmOwnerInput): Promise<Response<boolean>> {
+  public async linkOwnerWithFarm(data: LinkFarmOwnerDto): Promise<Response<boolean>> {
     return this.repository.linkOwnerWithFarm(data);
   }
 }

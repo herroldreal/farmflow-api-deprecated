@@ -5,7 +5,7 @@ import { configuration } from '@config/configuration';
 import { Global, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { SendGridModule } from '@ntegral/nestjs-sendgrid';
-import { UserModule } from '@shared/user';
+import { AccountModule } from '@shared/user';
 import { FirebaseAuthModule } from '@whitecloak/nestjs-passport-firebase';
 
 @Global()
@@ -20,7 +20,7 @@ import { FirebaseAuthModule } from '@whitecloak/nestjs-passport-firebase';
       issuer: process.env.ISSUER,
     }),
     SendGridModule,
-    UserModule,
+    AccountModule,
   ],
   providers: [AuthService, AuthSerializer, FirebaseAuthStrategy],
   exports: [AuthService],

@@ -28,6 +28,7 @@
 		"src/entity/**"
 	],
 	"rules": {
+		"@typescript-eslint/no-explicit-any": "off",
 		// These rules are for reference only.
 		//#region eslint
 		"class-methods-use-this": "off",

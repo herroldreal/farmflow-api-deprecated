@@ -32,8 +32,10 @@
 			"@models/*": ["core/models/*"],
 			"@enums/*": ["core/enums/*"],
 			"@dtos/*": ["core/dto/*"],
+			"@mappers/*": ["core/mappers/*"],
+			"@controllers/*": ["rest/controllers/*"],
 			"@repositories/*": ["core/repositories/*"],
-			"@services/*": ["gql/providers/*"],
+			"@services/*": ["core/services/*"],
 			"@resolvers/*": ["gql/resolvers/*"],
 			"@scalars/*": ["gql/scalars"]
 		},

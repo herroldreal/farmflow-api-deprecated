@@ -1,4 +1,4 @@
 export enum WeightMeasurementUnit {
-  KILO = 'Kilograms',
-  POUNDS = 'Pounds',
+  KILO = 'Kilos',
+  POUNDS = 'Libras',
 }

@@ -1,54 +1,53 @@
-import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { AutoMap } from '@automapper/classes';
 
-import { BaseInput } from './base.model';
+import { BaseModel } from './base.model';
 
-@ObjectType()
-export class Farm extends BaseInput {
-  @Field(() => ID)
+export class Farm extends BaseModel {
+  @AutoMap()
   public ownerId?: string;
 
-  @Field(() => ID)
+  @AutoMap()
   public id?: string;
 
-  @Field()
+  @AutoMap()
   public name!: string;
 
-  @Field()
+  @AutoMap()
   public abbreviation?: string;
 
-  @Field({ name: 'purpose' })
-  public purpose!: string;
-
-  @Field({ name: 'totalPropertyArea' })
+  @AutoMap()
   public totalPropertyArea!: number;
 
-  @Field({ name: 'cattleFarmingArea' })
+  @AutoMap()
   public cattleFarmingArea!: number;
 
-  @Field({ name: 'areaMeasurementUnit' })
+  @AutoMap()
   public areaMeasurementUnit!: string;
 
-  @Field({ name: 'milkMeasurement' })
+  @AutoMap()
   public milkMeasurement!: string;
 
-  @Field({ name: 'weightMeasurement' })
+  @AutoMap()
   public weightMeasurement!: string;
 
-  @Field({ name: 'country' })
+  @AutoMap()
+  public farmPurpose!: string;
+
+  @AutoMap()
   public country?: string;
 
-  @Field({ name: 'city' })
+  @AutoMap()
   public city?: string;
 
-  @Field({ name: 'countryCode' })
+  @AutoMap()
   public countryCode?: string;
 
-  @Field({ name: 'phoneNumber' })
+  @AutoMap()
   public phoneNumber?: string;
 
-  @Field({ name: 'latitude' })
+  @AutoMap()
   public latitude?: number;
 
-  @Field({ name: 'longitude' })
+  @AutoMap()
   public longitude?: number;
 }

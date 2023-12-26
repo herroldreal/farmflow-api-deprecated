@@ -4,15 +4,15 @@ import { RolesGuard } from '@common/guards';
 import { Filtering, FilteringParams } from '@decorators/filtering.decorator';
 import { Pagination, PaginationParams } from '@decorators/pagination.decorator';
 import { Sorting, SortingParams } from '@decorators/sorting.decorator';
-import { CreateFarmInput } from '@dtos/create-farm.input';
-import { LinkFarmOwnerInput } from '@dtos/link-farm-owner.input';
+import { FarmDto } from '@dtos/farm.dto';
+import { LinkFarmOwnerDto } from '@dtos/link-farm-owner.dto';
 import { Farm } from '@models/index';
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { FarmService } from '@services/farm.service';
 import { FirebaseAuthGuard } from '@whitecloak/nestjs-passport-firebase';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
 import { Response } from '../../core/response.model';
-import { FarmService } from '../../core/services/farm.service';
 
 @Controller('farm')
 @UseGuards(FirebaseAuthGuard)
@@ -33,13 +33,6 @@ export class FarmController {
     return this.farmService.getAllFarms(paginationParams, sort, filter);
   }
 
-  @Post('worker')
-  @Role(Roles.ADMIN, Roles.OWNER)
-  @UseGuards(RolesGuard)
-  public async testWorker(): Promise<string> {
-    return 'Hola, soy un trabajador y solo yo puedo entrar aca';
-  }
-
   @Get('getById')
   async getFarmById(@FilteringParams(['id']) filter: Filtering): Promise<Response<Farm>> {
     return this.farmService.getFarmById(filter);
@@ -55,7 +48,7 @@ export class FarmController {
 
   @Post()
   @Public()
-  async createFarm(@Body() data: CreateFarmInput): Promise<Response<Farm>> {
+  async createFarm(@Body() data: FarmDto): Promise<Response<Farm>> {
     this.logger.info('Creating farm');
     return this.farmService.createFarm(data);
   }
@@ -63,7 +56,7 @@ export class FarmController {
   @Post('link')
   @Role(Roles.OWNER, Roles.ADMIN)
   @UseGuards(RolesGuard)
-  async linkOwner(@Body() data: LinkFarmOwnerInput): Promise<Response<boolean>> {
+  async linkOwner(@Body() data: LinkFarmOwnerDto): Promise<Response<boolean>> {
     this.logger.info(`Linking owner ${data.ownerId} with farm ${data.farmId}`);
     return this.farmService.linkOwnerWithFarm(data);
   }

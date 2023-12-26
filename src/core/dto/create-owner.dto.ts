@@ -1,24 +1,29 @@
-import { ArgsType } from '@nestjs/graphql';
-import { IsString, ArrayNotEmpty, IsBoolean, IsOptional } from 'class-validator';
+import { IsString, IsBoolean, ArrayNotEmpty, IsOptional, IsUrl } from 'class-validator';
 
-@ArgsType()
-export class UserArgs {
-  @IsString({ always: true })
+export class CreateOwnerDto {
+  @IsOptional()
+  @IsString()
   public id!: string;
 
-  @IsString({ always: true })
+  @IsString()
   public name!: string;
 
-  @IsString({ always: true })
+  @IsString()
   public email!: string;
 
-  @IsString({ always: true })
+  @IsString()
   public phone!: string;
 
-  @IsString({ always: true })
+  @IsString()
+  @IsUrl()
+  @IsOptional()
+  public picture?: string;
+
+  @IsString()
+  @IsOptional()
   public country?: string;
 
-  @IsString({ always: true })
+  @IsString()
   @IsOptional()
   public countryCode?: string;
 
@@ -27,6 +32,7 @@ export class UserArgs {
   public farmId?: string;
 
   @IsBoolean()
+  @IsOptional()
   public blackListed?: boolean;
 
   @ArrayNotEmpty()

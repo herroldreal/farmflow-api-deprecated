@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { UserService } from '@shared/user';
+import { AccountService } from '@shared/user';
 import { auth } from 'firebase-admin';
-import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
 import type { Account, Payload } from './auth.interface';
 import { DebugLog } from '../debug';
@@ -9,10 +8,7 @@ import { DebugLog } from '../debug';
 @Injectable()
 @DebugLog('AuthService')
 export class AuthService {
-  constructor(
-    @InjectPinoLogger() private readonly logger: PinoLogger,
-    private user: UserService,
-  ) {}
+  constructor(private user: AccountService) {}
 
   @DebugLog('createAccount()')
   public async createAccount(account: Account): Promise<Payload | null> {
@@ -21,7 +17,6 @@ export class AuthService {
 
   @DebugLog('getPayload()')
   public async getPayload(token: string): Promise<auth.DecodedIdToken & Payload> {
-    this.logger.info(`Token => ${token}`);
     const decodedToken = await auth().verifyIdToken(token, true);
     return {
       ...decodedToken,

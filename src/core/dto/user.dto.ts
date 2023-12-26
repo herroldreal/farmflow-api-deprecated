@@ -1,8 +1,6 @@
-import { InputType } from '@nestjs/graphql';
 import { ArrayNotEmpty, IsBoolean, IsOptional, IsString, IsUUID } from 'class-validator';
 
-@InputType()
-export class UserInput {
+export class UserDto {
   @IsString()
   @IsUUID()
   public id!: string;

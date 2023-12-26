@@ -1,14 +1,13 @@
-import { Field, ObjectType, GraphQLISODateTime } from '@nestjs/graphql';
+import { AutoMap } from '@automapper/classes';
 import { IsOptional, IsString } from 'class-validator';
 
-@ObjectType()
-export class BaseInput {
+export class BaseModel {
   @IsString()
-  @Field(() => GraphQLISODateTime, { name: 'createdAt', nullable: false })
+  @AutoMap()
   public createdAt: string = new Date().toISOString();
 
+  @AutoMap()
   @IsString()
   @IsOptional()
-  @Field(() => GraphQLISODateTime, { name: 'updatedAt', nullable: true })
   public updatedAt?: string;
 }
