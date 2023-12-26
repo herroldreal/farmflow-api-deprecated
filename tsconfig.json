@@ -20,8 +20,8 @@
 		"strictBindCallApply": false,
 		"noFallthroughCasesInSwitch": false,
 		"resolveJsonModule": true,
-		"typeRoots": ["typings/global.d.ts", "/node_modules/@types"],
-		"types": ["reflect-metadata", "jest"],
+		"typeRoots": ["typings/global.d.ts", "node_modules/@types"],
+		"types": ["jest"],
 		"paths": {
 			"@app/*": ["./"],
 			"@base/*": ["base/*"],
@@ -50,10 +50,11 @@
 		"forceConsistentCasingInFileNames": true,
 		"esModuleInterop": true
 	},
-	"compileOnSave": true,
+	"compileOnSave": false,
 	"include": [
 		"typings/global.d.ts",
-		"src/**/*",
+		"src/**/*.ts",
+		"src/**/*.json",
 		"tests/**/*"
 	]
 }

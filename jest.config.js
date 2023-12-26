@@ -1,6 +1,7 @@
 module.exports = {
   preset: 'ts-jest',
-  roots: ['<rootDir>/src'],
+  verbose: true,
+  roots: ['<rootDir>'],
   setupFiles: ['./jest.setup.js'],
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest',
@@ -10,17 +11,31 @@ module.exports = {
   testEnvironment: 'node',
   coverageDirectory: '../coverage',
   moduleNameMapper: {
-    '^@App/(.*)': '<rootDir>/src/$1',
-    '^@Test/(.*)': '<rootDir>/src/tests/$1',
+    '^@app/(.*)': '<rootDir>/src/$1',
+    '^@base/(.*)': '<rootDir>/src/base/$1',
+    '^@decorators/(.*)': '<rootDir>/src/common/decorators/$1',
+    '^@auth/(.*)': '<rootDir>/src/auth/$1',
+    '^@shared/(.*)': '<rootDir>/src/shared/$1',
+    '^@common/(.*)': '<rootDir>/src/common/$1',
+    '^@config/(.*)': '<rootDir>/src/config/$1',
+    '^@models/(.*)': '<rootDir>/src/core/models/$1',
+    '^@enums/(.*)': '<rootDir>/src/core/enums/$1',
+    '^@dtos/(.*)': '<rootDir>/src/core/dto/$1',
+    '^@mappers/(.*)': '<rootDir>/src/core/mappers/$1',
+    '^@controllers/(.*)': '<rootDir>/src/rest/controllers/$1',
+    '^@repositories/(.*)': '<rootDir>/src/core/repositories/$1',
+    '^@services/(.*)': '<rootDir>/src/core/services/$1',
+    '^@test/(.*)': '<rootDir>/tests/$1',
   },
   setupFilesAfterEnv: ['./tests/setup.ts'],
-  collectCoverageFrom: ['src/**/*.ts', '!**/node_modules/**', '!**/tests/**'],
+  collectCoverage: false,
+  collectCoverageFrom: ['src/**/*.ts', '!**/src/config/envs/test.ts', '!**/node_modules/**', '!**/tests/**/*.ts'],
   coverageThreshold: {
     global: {
-      branches: 70,
-      functions: 86,
-      lines: 78,
-      statements: 77,
+      branches: 70, // 70
+      functions: 86, // 85
+      lines: 78, // 80
+      statements: 77, // 80
     },
   },
 };

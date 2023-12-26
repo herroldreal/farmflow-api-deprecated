@@ -1,0 +1,11 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base"
+  ],
+  "prConcurrentLimit": 5,
+  "prCreation": "status-success",
+  "prHourlyLimit": 1,
+  "schedule": ["before 3am on Monday"],
+  "rebaseWhen": "auto"
+}
