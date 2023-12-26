@@ -20,7 +20,8 @@
 		"strictBindCallApply": false,
 		"noFallthroughCasesInSwitch": false,
 		"resolveJsonModule": true,
-		"typeRoots": ["typings/global.d.ts"],
+		"typeRoots": ["typings/global.d.ts", "/node_modules/@types"],
+		"types": ["reflect-metadata", "jest"],
 		"paths": {
 			"@app/*": ["./"],
 			"@base/*": ["base/*"],
@@ -39,7 +40,6 @@
 			"@resolvers/*": ["gql/resolvers/*"],
 			"@scalars/*": ["gql/scalars"]
 		},
-
 		"moduleResolution": "node",
 		"newLine": "lf",
 		"allowUnreachableCode": false,
@@ -48,12 +48,12 @@
 		"noPropertyAccessFromIndexSignature": true,
 		"noUnusedParameters": true,
 		"forceConsistentCasingInFileNames": true,
-		"esModuleInterop": true,
+		"esModuleInterop": true
 	},
 	"compileOnSave": true,
 	"include": [
 		"typings/global.d.ts",
 		"src/**/*",
-		"test/**/*"
+		"tests/**/*"
 	]
 }
