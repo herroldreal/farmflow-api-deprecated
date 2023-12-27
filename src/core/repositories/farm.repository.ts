@@ -121,8 +121,8 @@ export class FarmRepository {
       const user = await userRef.get();
       if (user.exists) {
         try {
-          await farmRef.update({ ownerId: FieldValue.arrayRemove(data.ownerId) });
-          await userRef.update({ farmId: FieldValue.arrayUnion(data.farmId) });
+          await farmRef.update({ owners: FieldValue.arrayUnion(data.ownerId) });
+          await userRef.update({ farms: FieldValue.arrayUnion(data.farmId) });
           return ApiResponseBuilder.success(200, `El usuario ${data.ownerId} ha sido vinculado exitosamente`, true);
         } catch (e: any) {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -188,7 +188,7 @@ export class FarmRepository {
     if (farm.exists && worker.exists) {
       try {
         await farmRef.update({ workers: FieldValue.arrayRemove(data.workerId) });
-        await workerRef.update({ farmId: FieldValue.arrayRemove(data.farmId) });
+        await workerRef.update({ farms: FieldValue.arrayRemove(data.farmId) });
         return ApiResponseBuilder.success(
           200,
           `El trabajador ${data.workerId} ha sido desvinculado exitosamente`,

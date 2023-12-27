@@ -43,7 +43,7 @@ export class WorkerController {
   public async getAllWorkersByFarmId(
     @PaginationParams() pagination: Pagination,
     @SortingParams(['name']) sort: Sorting,
-    @FilteringParams(['name']) filter: Filtering,
+    @FilteringParams(['farms']) filter: Filtering,
   ): Promise<Response<WorkerDto[]>> {
     this.logger.info(`Get All Worker by Farm (${filter.value}`);
     return this.service.getAllWorkerByFarm(pagination, sort, filter);
