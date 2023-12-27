@@ -137,4 +137,10 @@ export class WorkerRepository {
       return ApiResponseBuilder.withError(500, e.message);
     }
   }
+
+  public async updateWorkInfo(data: WorkerDto): Promise<Response<Worker>> {
+    this.logger.info(JSON.stringify(data, null, 2));
+    await Promise.resolve();
+    return ApiResponseBuilder.notFound();
+  }
 }

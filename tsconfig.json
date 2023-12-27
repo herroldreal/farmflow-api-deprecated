@@ -37,8 +37,6 @@
 			"@controllers/*": ["rest/controllers/*"],
 			"@repositories/*": ["core/repositories/*"],
 			"@services/*": ["core/services/*"],
-			"@resolvers/*": ["gql/resolvers/*"],
-			"@scalars/*": ["gql/scalars"]
 		},
 		"moduleResolution": "node",
 		"newLine": "lf",

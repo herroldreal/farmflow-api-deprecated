@@ -1,6 +1,3 @@
-// eslint-disable-next-line max-len
-/* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/ban-ts-comment, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call, import/no-extraneous-dependencies */
-
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import type { NestExpressApplication } from '@nestjs/platform-express';
@@ -20,8 +17,7 @@ const IS_EMULATOR =
 
 const expressServer = express();
 
-// @ts-expect-error
-const serviceAccount = functions.config().farmflow_firebase_config;
+const serviceAccount = functions.config()['farmflow_firebase_config'];
 initializeApp({
   credential: cert({
     projectId: serviceAccount.project_id,

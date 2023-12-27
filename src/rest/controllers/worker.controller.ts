@@ -12,10 +12,8 @@ import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
 import { ApiResponseBuilder } from '../../core/response/api-response.builder';
 import { Response } from '../../core/response.model';
-import { DebugLog } from '../../debug';
 
 @Controller('worker')
-@DebugLog('WorkerController')
 @UseGuards(FirebaseAuthGuard)
 export class WorkerController {
   constructor(
@@ -24,7 +22,6 @@ export class WorkerController {
   ) {}
 
   @Get()
-  @DebugLog('getAllWorkers()')
   @Role(Roles.ADMIN, Roles.OWNER)
   @UseGuards(RolesGuard)
   public async getAllWorkers(
@@ -37,7 +34,6 @@ export class WorkerController {
   }
 
   @Get('farm')
-  @DebugLog('getAllWorkersByFarmId()')
   @Role(Roles.ADMIN, Roles.OWNER)
   @UseGuards(RolesGuard)
   public async getAllWorkersByFarmId(
@@ -50,7 +46,6 @@ export class WorkerController {
   }
 
   @Get()
-  @DebugLog('getWorker()')
   @Role(Roles.ADMIN, Roles.OWNER)
   @UseGuards(RolesGuard)
   public async getWorker(@FilteringParams(['name']) filter: Filtering): Promise<Response<WorkerDto>> {
@@ -59,7 +54,6 @@ export class WorkerController {
   }
 
   @Post()
-  @DebugLog('createWorker()')
   @Role(Roles.ADMIN, Roles.OWNER)
   @UseGuards(RolesGuard)
   public async createWorker(@Body() data: WorkerDto): Promise<Response<WorkerDto>> {
@@ -67,11 +61,11 @@ export class WorkerController {
   }
 
   @Put()
-  @DebugLog('updateWorkerInfo')
   @Role(Roles.ADMIN, Roles.OWNER)
   @UseGuards(RolesGuard)
   public async updateWorkerInfo(@Body() data: WorkerDto): Promise<Response<boolean>> {
     this.logger.info(`====> ${JSON.stringify(data, null, 2)}`);
+    await this.service.updateWorkInfo(data);
     return ApiResponseBuilder.notFound();
   }
 }

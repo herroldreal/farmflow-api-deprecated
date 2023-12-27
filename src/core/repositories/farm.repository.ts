@@ -18,13 +18,11 @@ import { InjectMapper } from '@timonmasberg/automapper-nestjs';
 import { FieldValue } from 'firebase-admin/firestore';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
-import { DebugLog } from '../../debug';
 import { PaginationBuilder } from '../pagination.model';
 import { ApiResponseBuilder } from '../response/api-response.builder';
 import { Response } from '../response.model';
 
 @Injectable()
-@DebugLog('FarmRepository')
 export class FarmRepository {
   // eslint-disable-next-line max-params
   constructor(
@@ -35,7 +33,6 @@ export class FarmRepository {
     @Inject(Collections.FARMS) private farmCollection: CollectionReference<Farm>,
   ) {}
 
-  @DebugLog('getAllFarms()')
   async getAllFarms(pagination: Pagination, sort?: Sorting, filter?: Filtering): Promise<Response<Farm[]>> {
     const { lastDoc, limit } = pagination;
     let query = this.farmCollection.limit(limit);
@@ -54,12 +51,11 @@ export class FarmRepository {
       const lastId = data.docs.length === limit ? data.docs[limit - 1].id : undefined;
       const resultPagination = new PaginationBuilder().build(snapshot, limit, lastId);
 
-      return ApiResponseBuilder.success(200, 'Informacion obtenida correctamente', result, resultPagination);
+      return ApiResponseBuilder.success(200, 'Ok', result, resultPagination);
     }
     return ApiResponseBuilder.notFound();
   }
 
-  @DebugLog('getFarm()')
   async getFarm(filter: Filtering): Promise<Response<Farm>> {
     this.logger.info(`Get  ${JSON.stringify(filter, null, 2)}`);
     const doc = await this.farmCollection.doc(filter.value).get();
@@ -67,12 +63,11 @@ export class FarmRepository {
       const result = doc.data();
       this.logger.info(`Farm => ${JSON.stringify(result, null, 2)}`);
 
-      return ApiResponseBuilder.success(200, 'Informacion obtenida correctamente', result);
+      return ApiResponseBuilder.success(200, 'Ok', result);
     }
     return ApiResponseBuilder.notFound();
   }
 
-  @DebugLog('getFarmsByOwner')
   async getFarmByOwner(sort: Sorting, filter: Filtering): Promise<Response<Farm[]>> {
     this.logger.info(`Get  ${JSON.stringify(filter, null, 2)}`);
     const snapshot = await this.farmCollection
@@ -84,12 +79,11 @@ export class FarmRepository {
       const result = <Farm[]>snapshot.docs.map((doc: QueryDocumentSnapshot) => doc.data());
       this.logger.info(`[Farm] => ${JSON.stringify(result, null, 2)}`);
 
-      return ApiResponseBuilder.success(200, 'Informacion obtenida correctamente', result);
+      return ApiResponseBuilder.success(200, 'Ok', result);
     }
     return ApiResponseBuilder.notFound();
   }
 
-  @DebugLog('createFarm()')
   async createFarm(data: FarmDto): Promise<Response<Farm>> {
     const farm = this.mapper.map(data, FarmDto, Farm);
     this.logger.info(`Create farm with data ${JSON.stringify(farm, null, 2)}`);
@@ -104,12 +98,11 @@ export class FarmRepository {
     await farmRef.set(farmInfo);
 
     const farmData = await this.farmCollection.doc(farmId).get();
-    return ApiResponseBuilder.success(200, 'Informacion obtenida correctamente', farmData.data());
+    return ApiResponseBuilder.success(200, 'Ok', farmData.data());
   }
 
   // TOOD: Verificar todos los link y unlink para distintos worker, farms and owners
 
-  @DebugLog('linkOwner()')
   async linkOwnerWithFarm(data: LinkFarmOwnerDto): Promise<Response<boolean>> {
     this.logger.info(`Link owner ${data.ownerId} with farm ${data.farmId}`);
 
@@ -134,7 +127,6 @@ export class FarmRepository {
     return ApiResponseBuilder.notFound();
   }
 
-  @DebugLog('unlinkOwner()')
   async unlinkOwner(data: UnlinkFarmOwnerDto): Promise<Response<boolean>> {
     this.logger.info(`Unlink owner ${data.ownerId} with farm ${data.farmId}`);
 
@@ -157,7 +149,6 @@ export class FarmRepository {
     return ApiResponseBuilder.notFound();
   }
 
-  @DebugLog('linkWorker()')
   async linkWorker(data: LinkFarmWorkerDto): Promise<Response<boolean>> {
     this.logger.info(`Link worker ${data.workerId} with farm ${data.farmId}`);
 
@@ -177,7 +168,6 @@ export class FarmRepository {
     return ApiResponseBuilder.notFound();
   }
 
-  @DebugLog('unlinkWorker()')
   async unlinkWorker(data: UnlinkFarmWorkerDto): Promise<Response<boolean>> {
     this.logger.info(`Unlink worker ${data.workerId} with farm ${data.farmId}`);
 

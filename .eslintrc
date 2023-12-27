@@ -57,6 +57,10 @@
 			"error",
 			3
 		],
+		"@typescript-eslint/no-unsafe-return": "off",
+		"@typescript-eslint/no-unsafe-call": "off",
+		"@typescript-eslint/no-unsafe-assignment": "off",
+		"@typescript-eslint/no-unsafe-argument": "off",
 		"import/prefer-default-export": "off",
 		"@typescript-eslint/no-explicit-any": "off",
 		"no-console": "error",

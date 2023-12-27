@@ -8,11 +8,9 @@ import { InjectMapper } from '@timonmasberg/automapper-nestjs';
 import { auth } from 'firebase-admin';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
-import { DebugLog } from '../../debug';
 import { Payload, User } from '../models/index';
 
 @Injectable()
-@DebugLog('OwnerRepository')
 export class OwnerRepository {
   // eslint-disable-next-line max-params
   constructor(
@@ -22,7 +20,6 @@ export class OwnerRepository {
     @Inject(REQUEST) private readonly request: { user: Payload },
   ) {}
 
-  @DebugLog('createOwner()')
   async createOwner(data: CreateOwnerDto): Promise<Owner | undefined> {
     this.logger.info('create owner');
     const userAccount = await auth().getUserByEmail(data.email);
@@ -44,7 +41,6 @@ export class OwnerRepository {
     throw new NotFoundException('No owner found with given id');
   }
 
-  @DebugLog('findAllWorkers')
   async findAllWorker(): Promise<User[]> {
     const snapshot = await this.userCollection.where('farmId', '==', this.request.user.farmId).get();
 

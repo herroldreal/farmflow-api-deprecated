@@ -11,18 +11,15 @@ import { Injectable } from '@nestjs/common';
 import { FarmRepository } from '@repositories/farm.repository';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
-import { DebugLog } from '../../debug';
 import { Response } from '../response.model';
 
 @Injectable()
-@DebugLog('FarmService')
 export class FarmService {
   constructor(
     @InjectPinoLogger() private readonly logger: PinoLogger,
     private readonly repository: FarmRepository,
   ) {}
 
-  @DebugLog('getAllFarms()')
   public async getAllFarms(pagination: Pagination, sort: Sorting, filter: Filtering): Promise<Response<Farm[]>> {
     const result = this.repository.getAllFarms(pagination, sort, filter);
     this.logger.info(`<=========================================================>`);
@@ -47,27 +44,22 @@ export class FarmService {
     return result;
   }
 
-  @DebugLog('createFarm()')
   public async createFarm(data: FarmDto): Promise<Response<Farm>> {
     return this.repository.createFarm(data);
   }
 
-  @DebugLog('linkOwnerWithFarm()')
   public async linkOwner(data: LinkFarmOwnerDto): Promise<Response<boolean>> {
     return this.repository.linkOwnerWithFarm(data);
   }
 
-  @DebugLog('unlinkOwner')
   public async unlinkOwner(data: UnlinkFarmOwnerDto): Promise<Response<boolean>> {
     return this.repository.unlinkOwner(data);
   }
 
-  @DebugLog('linkWorker')
   public async linkWorker(data: LinkFarmWorkerDto): Promise<Response<boolean>> {
     return this.repository.linkWorker(data);
   }
 
-  @DebugLog('unlinkWorker')
   public async unlinkWorker(data: UnlinkFarmWorkerDto): Promise<Response<boolean>> {
     return this.repository.unlinkWorker(data);
   }
