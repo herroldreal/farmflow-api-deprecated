@@ -1,43 +1,42 @@
-name: Deploy the main branch
+name: Setup, Test and Deploy the main branch on Firebase Functions
 on:
   push:
     branches:
       - main
+      - hotfix/*
+  pull_request:
+    branches:
+      - main
+      - hotfix/*
 jobs:
-  checkout:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-  setup:
+  test:
     strategy:
       matrix:
         node-version: [ '14.x', '16.x', '18.x' ]
     runs-on: ubuntu-latest
+    continue-on-error: false
     steps:
-      - uses: actions/setup-node@v3
-        name: Use Node.js ${{ matrix.node-version }}
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-  deps:
-    name: Install Deps
-    runs-on: ubuntu-latest
-    steps:
-      - run: npm ci
-  build:
-    name: Build Project
-    runs-on: ubuntu-latest
-    steps:
-      - run: npm run build --if-present
-  test:
-    name: Build Project
-    runs-on: ubuntu-latest
-    steps:
-      - run: npm run build --if-present
-  deploy:
-    name: Deploy to Firebase
-    runs-on: ubuntu-latest
-    steps:
-      - uses: jsryudev/deploy-firebase-functions@v0.0.2
+          cache: 'npm'
+
+      - name: Install Supertest, mocha, jest, chai
+        run: npm i -g -D supertest mocha jest chai
+
+      - name: Install Deps
+        run: npm install
+
+      - name: Build
+        run: npm run build --if-present
+
+      - name: Test
+        run: npm test
+
+      - name: Deploy to Firebase Functions
+        uses: jsryudev/deploy-firebase-functions@v0.0.2
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           FIREBASE_PROJECT: ${{ secrets.FIREBASE_PROJECT_ID }}
