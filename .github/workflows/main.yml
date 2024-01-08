@@ -16,7 +16,7 @@ jobs:
       id-token: 'write'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js 18.x
         uses: actions/setup-node@v3
         with:
@@ -34,16 +34,11 @@ jobs:
       - name: Test
         run: npm test
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3  # upload test results
-        with:
-          name: test-results
-          path: coverage/clover.xml
-
       - name: Test Report
-        uses: ArtiomTr/jest-coverage-report-action@v2.2.6
+        uses: ArtiomTr/jest-coverage-report-action@v2
         with:
-          github-token: ${{ secrets.GH_TOKEN }}
+          coverage-file: ./coverage/report.json
+          base-coverage-file: ./coverage/master/report.json
 
   deploy:
     needs: main
