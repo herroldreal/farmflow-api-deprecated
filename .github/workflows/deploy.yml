@@ -1,7 +1,7 @@
-name: 'Deploy'
+name: Deploy
 on:
   workflow_run:
-    workflows: [ 'Setup' ]
+    workflows: ["Setup"]
     types:
       - completed
   push:
@@ -14,7 +14,6 @@ on:
       - hotfix/*
 jobs:
   deploy:
-    continue-on-error: false
     name: Deploy to Firebase Functions
     runs-on: ubuntu-latest
     steps:

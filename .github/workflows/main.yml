@@ -1,4 +1,4 @@
-name: 'Setup'
+name: Setup
 on:
   push:
     branches:
@@ -14,7 +14,6 @@ jobs:
       matrix:
         node-version: [ '18.x', '20.x' ]
     runs-on: ubuntu-latest
-    continue-on-error: false
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}

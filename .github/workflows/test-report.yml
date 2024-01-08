@@ -1,21 +1,28 @@
-name: 'Test Report'
+name: Test Report
 on:
   workflow_run:
-    workflows: ['Setup']                     # runs after Setup workflow
+    workflows: ["Setup"]
     types:
       - completed
+  push:
+    branches:
+      - main
+      - hotfix/*
+  pull_request:
+    branches:
+      - main
+      - hotfix/*
 permissions:
   contents: read
   actions: read
   checks: write
 jobs:
   report:
-    continue-on-error: false
     runs-on: ubuntu-latest
     steps:
       - uses: dorny/test-reporter@v1
         with:
-          artifact: test-results            # artifact name
-          name: JEST Tests                  # Name of the check run which will be created
-          path: '*.xml'                     # Path to test results (inside artifact .zip)
-          reporter: jest-junit              # Format of test results
+          artifact: test-results
+          name: JEST Tests
+          path: '*.xml'
+          reporter: jest-junit
