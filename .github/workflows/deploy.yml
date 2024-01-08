@@ -1,5 +1,9 @@
-name: Setup, Test and Deploy the main branch on Firebase Functions
+name: 'Deploy'
 on:
+  workflow_run:
+    workflows: [ 'Setup' ]                     # runs after CI workflow
+    types:
+      - completed
   push:
     branches:
       - main
@@ -9,34 +13,12 @@ on:
       - main
       - hotfix/*
 jobs:
-  test:
-    strategy:
-      matrix:
-        node-version: [ '14.x', '16.x', '18.x' ]
+  deploy:
+    name: Deploy to Firebase Functions
     runs-on: ubuntu-latest
-    continue-on-error: false
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-
-      - name: Install Supertest, mocha, jest, chai
-        run: npm i -g -D supertest mocha jest chai
-
-      - name: Install Deps
-        run: npm install
-
-      - name: Build
-        run: npm run build --if-present
-
-      - name: Test
-        run: npm test
-
-      - name: Deploy to Firebase Functions
-        uses: jsryudev/deploy-firebase-functions@v0.0.2
+      - uses: actions/checkout@v4
+      - uses: jsryudev/deploy-firebase-functions@v0.0.2
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           FIREBASE_PROJECT: ${{ secrets.FIREBASE_PROJECT_ID }}

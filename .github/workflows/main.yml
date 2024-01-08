@@ -1,0 +1,36 @@
+name: 'Setup'
+on:
+  push:
+    branches:
+      - main
+      - hotfix/*
+  pull_request:
+    branches:
+      - main
+      - hotfix/*
+jobs:
+  main:
+    strategy:
+      matrix:
+        node-version: [ '14.x', '16.x', '18.x' ]
+    runs-on: ubuntu-latest
+    continue-on-error: false
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install Supertest, mocha, jest, chai
+        run: npm i -g -D supertest mocha jest chai
+
+      - name: Install Deps
+        run: npm install
+
+      - name: Build
+        run: npm run build --if-present
+
+      - name: Test
+        run: npm test
