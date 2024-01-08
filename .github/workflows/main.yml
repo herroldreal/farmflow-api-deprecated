@@ -12,7 +12,7 @@ jobs:
   main:
     strategy:
       matrix:
-        node-version: [ '16.x', '18.x', '20.x' ]
+        node-version: [ '18.x', '20.x' ]
     runs-on: ubuntu-latest
     continue-on-error: false
     steps:
@@ -21,7 +21,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
 
       - name: Install Supertest, mocha, jest, chai
         run: npm i -g -D supertest mocha jest chai

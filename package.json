@@ -24,10 +24,10 @@
 		"deploy": "firebase deploy --only functions",
 		"logs": "firebase functions:log",
 		"doc:api": "npm run build && node dist/src/swagger",
-		"prepare": "if [[ -x \"$(command -v husky)\" ]]; then  husky install; fi"
+		"prepare": "husky install"
 	},
 	"engines": {
-		"node": "18"
+		"node": "^16 || ^18 || ^20"
 	},
 	"dependencies": {
 		"@apollo/server": "4.9.5",
