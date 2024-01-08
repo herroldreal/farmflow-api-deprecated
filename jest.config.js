@@ -9,7 +9,7 @@ module.exports = {
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   testEnvironment: 'node',
-  coverageDirectory: '../coverage',
+  coverageDirectory: './coverage',
   moduleNameMapper: {
     '^@app/(.*)': '<rootDir>/src/$1',
     '^@base/(.*)': '<rootDir>/src/base/$1',
