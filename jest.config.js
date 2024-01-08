@@ -29,6 +29,7 @@ module.exports = {
   },
   setupFilesAfterEnv: ['./tests/setup.ts'],
   collectCoverage: true,
+  coverageReporters: ['json', 'text'],
   collectCoverageFrom: ['src/**/*.ts', '!**/node_modules/**', '!**/tests/**/*.ts'],
   coverageThreshold: {
     global: {

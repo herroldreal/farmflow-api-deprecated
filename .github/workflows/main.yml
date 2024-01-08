@@ -36,8 +36,6 @@ jobs:
 
       - name: Test Report
         uses: ArtiomTr/jest-coverage-report-action@v2
-        with:
-          coverage-file: ./coverage/coverage-final.json
 
   deploy:
     needs: main
