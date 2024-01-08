@@ -23,8 +23,7 @@
 		"shell": "npm run build && firebase functions:shell",
 		"deploy": "firebase deploy --only functions",
 		"logs": "firebase functions:log",
-		"doc": "compodoc -p tsconfig.json -s -d docs",
-		"doc:api": "npm run build && node dist/swagger",
+		"doc:api": "npm run build && node dist/src/swagger",
 		"prepare": "if [[ -x \"$(command -v husky)\" ]]; then  husky install; fi"
 	},
 	"engines": {
@@ -74,7 +73,6 @@
 	},
 	"devDependencies": {
 		"@babel/preset-typescript": "7.23.3",
-		"@compodoc/compodoc": "1.1.23",
 		"@firebase/firestore-types": "3.0.0",
 		"@jest/globals": "29.7.0",
 		"@nestjs/cli": "10.2.1",
