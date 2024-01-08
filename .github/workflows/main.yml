@@ -41,7 +41,7 @@ jobs:
         uses: actions/upload-artifact@v3  # upload test results
         with:
           name: test-results
-          path: reports/jest-*.xml
+          path: coverage/clover.xml
 
       - name: Test Report
         uses: dorny/test-reporter@v1
@@ -49,7 +49,7 @@ jobs:
         if: success() || failure()    # run this step even if previous step failed
         with:
           name: test-results            # Name of the check run which will be created
-          path: reports/jest-*.xml      # Path to test results
+          path: coverage/clover.xml      # Path to test results
           reporter: jest-junit          # Format of test results
 
   deploy:
