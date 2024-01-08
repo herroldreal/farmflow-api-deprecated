@@ -37,6 +37,14 @@ jobs:
       - name: Test
         run: npm test
 
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()    # run this step even if previous step failed
+        with:
+          name: JEST Tests            # Name of the check run which will be created
+          path: reports/jest-*.json   # Path to test results
+          reporter: jest-junit        # Format of test results
+
   deploy:
     needs: main
     name: Deploy to Firebase Functions
@@ -47,15 +55,3 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           FIREBASE_PROJECT: ${{ secrets.FIREBASE_PROJECT_ID }}
-
-  report:
-    needs: main
-    runs-on: ubuntu-latest
-    steps:
-      - name: Test Results
-        uses: dorny/test-reporter@v1.7.0
-        if: success() || failure()
-        with:
-          name: JEST Tests
-          path: ${{ github.workspace }}/reports/test-results.json
-          reporter: jest-junit
