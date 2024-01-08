@@ -34,8 +34,8 @@ jobs:
       - name: Test
         run: npm test
 
+      - run: npm i npx
       - name: Test Report
-        run: npm install
         uses: ArtiomTr/jest-coverage-report-action@v2
 
   deploy:
