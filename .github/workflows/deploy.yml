@@ -1,0 +1,43 @@
+name: Deploy the main branch
+on:
+  push:
+    branches:
+      - main
+jobs:
+  checkout:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+  setup:
+    strategy:
+      matrix:
+        node-version: [ '14.x', '16.x', '18.x' ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v3
+        name: Use Node.js ${{ matrix.node-version }}
+        with:
+          node-version: ${{ matrix.node-version }}
+  deps:
+    name: Install Deps
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm ci
+  build:
+    name: Build Project
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm run build --if-present
+  test:
+    name: Build Project
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm run build --if-present
+  deploy:
+    name: Deploy to Firebase
+    runs-on: ubuntu-latest
+    steps:
+      - uses: jsryudev/deploy-firebase-functions@v0.0.2
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          FIREBASE_PROJECT: ${{ secrets.FIREBASE_PROJECT_ID }}
