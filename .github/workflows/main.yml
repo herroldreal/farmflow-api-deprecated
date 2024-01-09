@@ -3,19 +3,21 @@ on:
   push:
     branches:
       - main
-  pull_request_target:
-    branches:
-      - main
-
-permissions:
-  contents: 'read'
-  id-token: 'write'
+permissions: read-all
 
 jobs:
   main:
+    name: Build and Test
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Use Node.js 18.x
         uses: actions/setup-node@v3
         with:
@@ -39,13 +41,15 @@ jobs:
     continue-on-error: false
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Deploy to Firebase
-        uses: sws2apps/firebase-deployment@main
+        uses: sws2apps/firebase-deployment@v3.4.0
         with:
           workloadIdentityProvider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           serviceAccount: ${{ secrets.SERVICE_ACCOUNT }}
           node-version: 18
           function: true
-          hosting: false
+          hosting: true
           project: ${{ secrets.FIREBASE_PROJECT_ID }}

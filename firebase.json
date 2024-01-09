@@ -1,5 +1,4 @@
 {
-	"firestore": {},
 	"functions": [
 		{
 			"source": ".",

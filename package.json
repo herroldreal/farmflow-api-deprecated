@@ -21,13 +21,13 @@
 		"test:coverage": "jest --coverage --watchAll=false --maxWorkers=1 --forceExit --detectOpenHandles --silent",
 		"serve": "npm run build && firebase emulators:start --only functions",
 		"shell": "npm run build && firebase functions:shell",
-		"deploy": "firebase deploy --only functions",
+		"deploy": "firebase deploy",
 		"logs": "firebase functions:log",
 		"doc:api": "npm run build && node dist/src/swagger",
 		"prepare": "husky install"
 	},
 	"engines": {
-		"node": "^16 || ^18 || ^20"
+		"node": "^18 || ^20"
 	},
 	"dependencies": {
 		"@apollo/server": "4.9.5",
