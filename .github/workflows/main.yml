@@ -53,5 +53,5 @@ jobs:
           serviceAccount: ${{ secrets.SERVICE_ACCOUNT }}
           node-version: 18
           function: true
-          hosting: true
+          hosting: false
           project: ${{ secrets.FIREBASE_PROJECT_ID }}
