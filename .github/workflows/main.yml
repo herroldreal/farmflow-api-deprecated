@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - main
-  pull_request:
+  pull_request_target:
     branches:
       - main
 
@@ -33,13 +33,10 @@ jobs:
       - name: Test
         run: npm test
 
-      - run: npm i -g npx --force
-      - name: Test Report
-        uses: ArtiomTr/jest-coverage-report-action@v2.2.6
-
   deploy:
     needs: main
     name: Deploy to Firebase Functions
+    continue-on-error: false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

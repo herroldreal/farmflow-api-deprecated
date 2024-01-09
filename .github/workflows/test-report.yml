@@ -1,0 +1,22 @@
+name: Test
+on:
+  pull_request_target:
+    branches:
+      - main
+
+jobs:
+  coverage:
+    permissions:
+      checks: write
+      pull-requests: write
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+      - uses: ArtiomTr/jest-coverage-report-action@v2
+        with:
+          custom-title: 'Coverage report for FarmFlow Backend'
+          test-script: npm test
+          prnumber: ${{ steps.findPr.outputs.number }}
