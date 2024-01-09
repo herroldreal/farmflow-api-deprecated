@@ -1,0 +1,72 @@
+name: Setup
+on:
+  push:
+    branches:
+      - main
+permissions: read-all
+
+jobs:
+  main:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+
+      - name: Install Supertest, mocha, jest, chai
+        run: npm i -g -D supertest mocha jest chai
+
+      - name: Install Deps
+        run: npm install
+
+      - name: Build
+        run: npm run build --if-present
+
+      - name: Archive Production Artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: dist
+          path: dist
+
+      - name: Test
+        run: npm test
+
+  deploy:
+    needs: main
+    name: Deploy to Firebase Functions
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+
+      - name: Install Husky
+        run: npm i -g -D husky && husky install
+
+      - name: Install Deps
+        run: npm install
+
+      - name: Download Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: dist
+          path: dist
+
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only functions --message \"${{ github.event.head_commit.message }}\"
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}

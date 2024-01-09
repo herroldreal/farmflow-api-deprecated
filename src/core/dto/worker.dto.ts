@@ -28,10 +28,10 @@ export class WorkerDto {
   @IsAlphanumeric()
   public manager?: string;
 
-  @AutoMap()
+  @AutoMap(() => Array<string>)
   @IsOptional()
   @IsAlphanumeric()
-  public farmId?: string;
+  public farms?: string[];
 
   @AutoMap()
   @IsString({ each: true })

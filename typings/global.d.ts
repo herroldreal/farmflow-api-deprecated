@@ -22,6 +22,8 @@ export declare global {
       AUDIENCE: string;
       ISSUER: string;
 
+      FUNCTIONS_EMULATOR: boolean;
+
       JWT_SECRET: string;
       JWT_REFRESH_SECRET: string;
 

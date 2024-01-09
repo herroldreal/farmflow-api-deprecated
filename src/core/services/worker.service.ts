@@ -6,18 +6,15 @@ import { Injectable } from '@nestjs/common';
 import { WorkerRepository } from '@repositories/worker.repository';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
-import { DebugLog } from '../../debug';
 import { Response } from '../response.model';
 
 @Injectable()
-@DebugLog('WorkerService')
 export class WorkerService {
   constructor(
     @InjectPinoLogger() private readonly logger: PinoLogger,
     private readonly repository: WorkerRepository,
   ) {}
 
-  @DebugLog('getAll()')
   public async getAll(pagination: Pagination, sort: Sorting, filter: Filtering): Promise<Response<WorkerDto[]>> {
     const response = await this.repository.getAllWorkers(pagination, sort, filter);
     this.logger.info(`<========================================================>`);
@@ -27,8 +24,23 @@ export class WorkerService {
     return response;
   }
 
-  @DebugLog('createWorker()')
+  public async getAllWorkerByFarm(
+    pagination: Pagination,
+    sort: Sorting,
+    filter: Filtering,
+  ): Promise<Response<WorkerDto[]>> {
+    return this.repository.getAllWorkerByFarmId(pagination, sort, filter);
+  }
+
+  public async getWorker(filter: Filtering): Promise<Response<WorkerDto>> {
+    return this.repository.getWorker(filter);
+  }
+
   public async createWorker(data: WorkerDto): Promise<Response<WorkerDto>> {
     return this.repository.createWorker(data);
+  }
+
+  public async updateWorkInfo(data: WorkerDto): Promise<Response<WorkerDto>> {
+    return this.repository.updateWorkInfo(data);
   }
 }

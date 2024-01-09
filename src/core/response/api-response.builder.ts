@@ -21,6 +21,7 @@ export class ApiResponseBuilder {
     };
   }
 
+  // eslint-disable-next-line max-params
   static success<T>(
     status: number,
     message: string,
@@ -37,4 +38,5 @@ export class ApiResponseBuilder {
       },
     };
   }
+  // eslint-disable-next-line max-params
 }

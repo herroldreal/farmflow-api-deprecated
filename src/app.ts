@@ -1,30 +1,39 @@
-// eslint-disable-next-line max-len
-/* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/ban-ts-comment, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call, import/no-extraneous-dependencies */
-
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import express from 'express';
-import * as admin from 'firebase-admin';
+import { initializeApp, cert } from 'firebase-admin/app';
+import { getFirestore } from 'firebase-admin/firestore';
 import * as functions from 'firebase-functions';
 import { LoggerErrorInterceptor } from 'nestjs-pino';
 
 import { middleware } from './app.middleware';
 import { AppModule } from './app.module';
 
+const IS_EMULATOR =
+  (typeof process.env.FUNCTIONS_EMULATOR === 'boolean' && process.env.FUNCTIONS_EMULATOR) ||
+  process.env.FUNCTIONS_EMULATOR === Boolean('true');
+
 const expressServer = express();
 
-// @ts-expect-error
-const serviceAccount = functions.config().farmflow_firebase_config;
-admin.initializeApp({
-  credential: admin.credential.cert({
+const serviceAccount = functions.config()['farmflow_firebase_config'];
+initializeApp({
+  credential: cert({
     projectId: serviceAccount.project_id,
     privateKey: <string>serviceAccount.private_key.replace(/\\n/g, '\n'),
     clientEmail: serviceAccount.client_email,
   }),
   databaseURL: 'https://farmflow-d2ece-default-rtdb.firebaseio.com/',
 });
+const firestore = getFirestore();
+if (IS_EMULATOR) {
+  firestore.settings({
+    host: 'localhost',
+    port: 8081,
+    ssl: false,
+  });
+}
 
 const createFunctions = async (expressInstance): Promise<void> => {
   const isProduction = process.env.NODE_ENV === 'production';

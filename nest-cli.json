@@ -1,14 +1,17 @@
 {
+	"$schema": "https://json.schemastore.org/nest-cli",
+	"collection": "@nestjs/schematics",
 	"sourceRoot": "src",
 	"entryFile": "app",
 	"compilerOptions": {
-		"tsConfigPath": "tsconfig.build.json",
 		"deleteOutDir": true,
+		"tsConfigPath": "tsconfig.build.json",
 		"plugins": [
 			{
 				"name": "@nestjs/graphql",
 				"options": {
-					"introspectComments": true
+					"introspectComments": true,
+					"typeFileNameSuffix": [".model.ts", ".args.ts", ".input.ts"]
 				}
 			},
 			{
