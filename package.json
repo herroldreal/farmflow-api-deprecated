@@ -24,7 +24,7 @@
 		"deploy": "firebase deploy --only functions",
 		"logs": "firebase functions:log",
 		"doc:api": "npm run build && node dist/src/swagger",
-		"prepare": "husky install"
+		"prepare": "node -e \"if (process.env.NODE_ENV !== 'production'){process.exit(1)} \" || husky install"
 	},
 	"engines": {
 		"node": "^18 || ^20"
