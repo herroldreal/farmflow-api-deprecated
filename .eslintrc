@@ -2,7 +2,7 @@
 	"root": true,
 	"parser": "@typescript-eslint/parser",
 	"parserOptions": {
-		"project": true,
+		"project": ["tsconfig.json", "tsconfig.dev.json"],
 		"sourceType": "module",
 		"ecmaVersion": 2021,
 		"ecmaFeatures": {
@@ -25,6 +25,7 @@
 	},
 	"plugins": [
 		"@typescript-eslint",
+		"import",
 		"sonarjs",
 		"jest",
 		"prettier"
@@ -33,6 +34,7 @@
 		"eslint:recommended",
 		"airbnb-base",
 		"airbnb-typescript/base",
+		"google",
 		"plugin:jest/recommended",
 		"plugin:sonarjs/recommended",
 		"plugin:@typescript-eslint/strict-type-checked",
@@ -42,6 +44,7 @@
 	"ignorePatterns": [
 		"**/node_modules/**",
 		"package.json",
+		"/lib/**/*", // Ignore built files.
 		"package-lock.json",
 		".prettierrc.json",
 		".eslintrc",

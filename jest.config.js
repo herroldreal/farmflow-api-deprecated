@@ -28,9 +28,18 @@ module.exports = {
     '^@test/(.*)': '<rootDir>/tests/$1',
   },
   setupFilesAfterEnv: ['./tests/setup.ts'],
-  collectCoverage: true,
-  coverageReporters: ['json', 'text'],
-  collectCoverageFrom: ['src/**/*.ts', '!**/node_modules/**', '!**/tests/**/*.ts'],
+  collectCoverage: false,
+  collectCoverageFrom: ['src/**/*.{ts,tsx}', '!**/node_modules/**', '!**/tests/**/*.ts'],
+  reporters: [
+    'default',
+    [
+      'jest-junit',
+      {
+        outputDirectory: 'report',
+        outputName: 'report.json',
+      },
+    ],
+  ],
   coverageThreshold: {
     global: {
       branches: 0, // 70

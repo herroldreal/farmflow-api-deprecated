@@ -37,3 +37,10 @@ lerna-debug.log*
 .idea/
 .runtimeconfig.json
 .env
+
+# Compiled JavaScript files
+lib/**/*.js
+lib/**/*.js.map
+
+# TypeScript v1 declaration files
+typings/
