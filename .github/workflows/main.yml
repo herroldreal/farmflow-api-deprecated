@@ -23,7 +23,7 @@ jobs:
           node-version: '18.x'
 
       - name: Install Supertest, mocha, jest, chai
-        run: npm i -g -D supertest mocha jest chai npx
+        run: npm i -g -D supertest mocha jest chai
 
       - name: Install Deps
         run: npm install
