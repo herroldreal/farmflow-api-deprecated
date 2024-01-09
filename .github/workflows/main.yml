@@ -27,6 +27,12 @@ jobs:
       - name: Build
         run: npm run build --if-present
 
+      - name: Archive Production Artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: dist
+          path: dist
+
       - name: Test
         run: npm test
 
@@ -46,13 +52,15 @@ jobs:
         with:
           node-version: '18.x'
 
-      - name: Deploy to Firebase
-        uses: sws2apps/firebase-deployment@main
+      - name: Download Artifact
+        uses: actions/download-artifact@master
         with:
-          workloadIdentityProvider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-          serviceAccount: ${{ secrets.SERVICE_ACCOUNT }}
-          config: './firebase.json'
-          node-version: 18
-          function: true
-          hosting: false
-          project: ${{ secrets.FIREBASE_PROJECT_ID }}
+          name: dist
+          path: dist
+
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only functions --message \"${{ github.event.head_commit.message }}\"
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
