@@ -9,11 +9,6 @@ jobs:
   main:
     name: Build and Test
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: 'read'
-      id-token: 'write'
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -38,8 +33,10 @@ jobs:
   deploy:
     needs: main
     name: Deploy to Firebase Functions
-    continue-on-error: false
     runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -49,6 +46,7 @@ jobs:
         with:
           workloadIdentityProvider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           serviceAccount: ${{ secrets.SERVICE_ACCOUNT }}
+          config: './firebase.json'
           node-version: 18
           function: true
           hosting: true
