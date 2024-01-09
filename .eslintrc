@@ -25,7 +25,6 @@
 	},
 	"plugins": [
 		"@typescript-eslint",
-		"sonarjs",
 		"jest",
 		"prettier"
 	],
@@ -34,7 +33,6 @@
 		"airbnb-base",
 		"airbnb-typescript/base",
 		"plugin:jest/recommended",
-		"plugin:sonarjs/recommended",
 		"plugin:@typescript-eslint/strict-type-checked",
 		"plugin:@typescript-eslint/stylistic-type-checked",
 		"plugin:prettier/recommended"
@@ -229,14 +227,6 @@
 		],
 		"@typescript-eslint/no-extraneous-class": "off",
 		"@typescript-eslint/no-unsafe-member-access": "off",
-		//#endregion
-
-		//#region sonarjs
-		"sonarjs/no-duplicate-string": "off",
-		"sonarjs/cognitive-complexity": [
-			"error",
-			25
-		]
 		//#endregion
 	},
 	"settings": {
