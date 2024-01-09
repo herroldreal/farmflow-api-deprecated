@@ -2,7 +2,7 @@
 	"root": true,
 	"parser": "@typescript-eslint/parser",
 	"parserOptions": {
-		"project": ["tsconfig.json", "tsconfig.dev.json"],
+		"project": true,
 		"sourceType": "module",
 		"ecmaVersion": 2021,
 		"ecmaFeatures": {
@@ -25,7 +25,6 @@
 	},
 	"plugins": [
 		"@typescript-eslint",
-		"import",
 		"sonarjs",
 		"jest",
 		"prettier"
@@ -43,15 +42,13 @@
 	"ignorePatterns": [
 		"**/node_modules/**",
 		"package.json",
-		"/lib/**/*", // Ignore built files.
 		"package-lock.json",
 		".prettierrc.json",
 		".eslintrc",
 		"jest.config.js",
 		"jest.setup.js",
 		"dist/",
-		"tsconfig-paths-bootstrap.js",
-		".gitlab-ci.yml"
+		"tsconfig-paths-bootstrap.js"
 	],
 	"rules": {
 		"max-lines-per-function": ["error", { "max": 35 ,"skipBlankLines": true, "skipComments": true }],
