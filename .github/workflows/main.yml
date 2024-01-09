@@ -52,6 +52,9 @@ jobs:
         with:
           node-version: '18.x'
 
+      - name: Install Husky
+        run: npm i -g -D husky && husky install
+
       - name: Install Deps
         run: npm install
 
