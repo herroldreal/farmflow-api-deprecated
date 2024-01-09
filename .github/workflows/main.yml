@@ -7,13 +7,12 @@ on:
     branches:
       - main
 
-permissions: read-all
+permissions:
+  contents: 'read'
+  id-token: 'write'
 
 jobs:
   main:
-    permissions:
-      contents: 'read'
-      id-token: 'write'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -34,9 +33,9 @@ jobs:
       - name: Test
         run: npm test
 
-      - run: npm i npx
+      - run: npm i -g npx
       - name: Test Report
-        uses: ArtiomTr/jest-coverage-report-action@v2
+        uses: ArtiomTr/jest-coverage-report-action@v2.2.6
 
   deploy:
     needs: main
