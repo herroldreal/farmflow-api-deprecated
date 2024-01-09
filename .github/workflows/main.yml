@@ -33,7 +33,7 @@ jobs:
       - name: Test
         run: npm test
 
-      - run: npm i -g npx
+      - run: npm i -g npx --force
       - name: Test Report
         uses: ArtiomTr/jest-coverage-report-action@v2.2.6
 
