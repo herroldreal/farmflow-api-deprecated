@@ -37,3 +37,7 @@ lerna-debug.log*
 .idea/
 .runtimeconfig.json
 .env
+.env.dev
+.env.prod
+.env.test
+env.json

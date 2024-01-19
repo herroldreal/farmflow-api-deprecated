@@ -1,19 +1,48 @@
 import { Account, Payload } from '@auth/auth.interface';
-import { Injectable } from '@nestjs/common';
+import { HeaderService } from '@base/services/header.service';
+import { Inject, Injectable, Scope } from '@nestjs/common';
 import { auth } from 'firebase-admin';
+import { FirebaseDynamicLinks } from 'firebase-dynamic-links';
+import * as functions from 'firebase-functions';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
 import { EmailService } from '../../core/email.service';
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class AccountService {
   constructor(
+    @Inject() private readonly headerService: HeaderService,
     @InjectPinoLogger('AccountService') private readonly logger: PinoLogger,
     private readonly emailService: EmailService,
   ) {}
 
+  public async generateDeepLinkToCreateWorkerAccount(email: string) {
+    const apiKey = <string>functions.config()['env'].farmflow.webapikey;
+    const dynamicLinkService = new FirebaseDynamicLinks(apiKey);
+
+    this.logger.info('Invite user to create account with DeepLink');
+    const { shortLink } = await dynamicLinkService.createLink({
+      dynamicLinkInfo: {
+        navigationInfo: {
+          enableForcedRedirect: true,
+        },
+        domainUriPrefix: 'https://farmflow.page.link',
+        link: `https://thefarmflow.com/invite?id=${this.headerService.getFarmHeaders().farmId}`,
+        androidInfo: {
+          androidPackageName: 'com.rj.farmflow',
+        },
+      },
+    });
+
+    await this.emailService.sendInviteEmail(email, {
+      user_name: email,
+      invitation_link: shortLink,
+    });
+  }
+
   public async createAccount(account: Account): Promise<Payload> {
     this.logger.info('createAccount()');
+
     try {
       const userAccount = await auth().createUser({
         password: account.password,

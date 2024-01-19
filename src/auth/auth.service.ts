@@ -12,6 +12,10 @@ export class AuthService {
     return this.user.createAccount(account);
   }
 
+  public async inviteWorker(email: string, farmId: string): Promise<void> {
+    return this.user.generateDeepLinkToCreateWorkerAccount(email, farmId);
+  }
+
   public async getPayload(token: string): Promise<auth.DecodedIdToken & Payload> {
     const decodedToken = await auth().verifyIdToken(token, true);
     return {

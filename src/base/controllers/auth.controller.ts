@@ -1,7 +1,12 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
 import { Account, AuthService, Payload } from '../../auth';
+
+interface Invitation {
+  email: string;
+  farmId: string;
+}
 
 @Controller('auth')
 export class AuthController {
@@ -10,11 +15,15 @@ export class AuthController {
     private auth: AuthService,
   ) {}
 
+  @Post('invite')
+  public async inviteWorker(@Body() invitation: Invitation): Promise<void> {
+    this.logger.info(`Inviting worker ${invitation.email}`);
+    const { email, farmId } = invitation;
+    return this.auth.inviteWorker(email, farmId);
+  }
+
   @Post('register')
   public async registerUser(@Body() account: Account): Promise<Payload | null> {
-    this.logger.info('Create account');
-    const response = await this.auth.createAccount(account);
-    this.logger.info(`User account created => ${JSON.stringify(response, null, 2)}`);
-    return response;
+    return this.auth.createAccount(account);
   }
 }
