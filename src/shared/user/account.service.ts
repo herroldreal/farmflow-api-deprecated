@@ -12,6 +12,33 @@ export class AccountService {
     private readonly emailService: EmailService,
   ) {}
 
+<<<<<<< Updated upstream
+=======
+  public async generateDeepLinkToCreateWorkerAccount(email: string) {
+    const apiKey = <string>functions.config()['env'].farmflow.webapikey;
+    const dynamicLinkService = new FirebaseDynamicLinks(apiKey);
+
+    this.logger.info('Invite user to create account with DeepLink');
+    const { shortLink } = await dynamicLinkService.createLink({
+      dynamicLinkInfo: {
+        navigationInfo: {
+          enableForcedRedirect: true,
+        },
+        domainUriPrefix: 'https://farmflow.page.link',
+        link: '', // `https://thefarmflow.com/invite?id=${this.headerService.getFarmHeaders().farmId}`,
+        androidInfo: {
+          androidPackageName: 'com.rj.farmflow',
+        },
+      },
+    });
+
+    await this.emailService.sendInviteEmail(email, {
+      user_name: email,
+      invitation_link: shortLink,
+    });
+  }
+
+>>>>>>> Stashed changes
   public async createAccount(account: Account): Promise<Payload> {
     this.logger.info('createAccount()');
     try {

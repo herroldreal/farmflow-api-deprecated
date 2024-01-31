@@ -10,6 +10,16 @@ export class AuthController {
     private auth: AuthService,
   ) {}
 
+<<<<<<< Updated upstream
+=======
+  @Post('invite')
+  public async inviteWorker(@Body() invitation: Invitation): Promise<void> {
+    this.logger.info(`Inviting worker ${invitation.email}`);
+    const { email } = invitation;
+    return this.auth.inviteWorker(email);
+  }
+
+>>>>>>> Stashed changes
   @Post('register')
   public async registerUser(@Body() account: Account): Promise<Payload | null> {
     this.logger.info('Create account');
