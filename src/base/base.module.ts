@@ -6,11 +6,6 @@ import { AuthController, HealthController } from './controllers';
 
 @Module({
   imports: [TerminusModule, HttpModule], // Authentication
-<<<<<<< Updated upstream
-=======
-  providers: [HeaderService],
-  exports: [HeaderService],
->>>>>>> Stashed changes
   controllers: [AuthController, HealthController],
 })
 export class BaseModule {}

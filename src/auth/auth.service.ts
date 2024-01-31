@@ -12,13 +12,6 @@ export class AuthService {
     return this.user.createAccount(account);
   }
 
-<<<<<<< Updated upstream
-=======
-  public async inviteWorker(email: string): Promise<void> {
-    return this.user.generateDeepLinkToCreateWorkerAccount(email);
-  }
-
->>>>>>> Stashed changes
   public async getPayload(token: string): Promise<auth.DecodedIdToken & Payload> {
     const decodedToken = await auth().verifyIdToken(token, true);
     return {
