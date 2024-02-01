@@ -1,3 +1,4 @@
+// eslint-disable-next-line max-classes-per-file
 import { Collections } from '@enums/collections';
 import { CollectionReference, QueryDocumentSnapshot } from '@google-cloud/firestore';
 import { Inject } from '@nestjs/common';

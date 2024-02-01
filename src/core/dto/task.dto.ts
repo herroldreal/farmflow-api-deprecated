@@ -1,3 +1,4 @@
+// eslint-disable-next-line max-classes-per-file
 import { AutoMap } from '@automapper/classes';
 import { IsArray, IsNumber, IsOptional, IsString, IsUrl } from 'class-validator';
 
