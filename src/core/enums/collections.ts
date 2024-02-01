@@ -2,5 +2,6 @@ export enum Collections {
   USERS = 'users',
   FARMS = 'farms',
   WORKERS = 'workers',
-  TODOS = 'todos',
+  TASKS = 'tasks',
+  TASK_VERSIONS = 'task_versions',
 }
