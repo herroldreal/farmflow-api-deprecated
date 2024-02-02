@@ -4,12 +4,14 @@ import { Pagination } from '@decorators/pagination.decorator';
 import { Sorting } from '@decorators/sorting.decorator';
 // import { TaskDto } from '@dtos/task.dto';
 import { TaskDto } from '@dtos/task.dto';
+import { UpdateTaskDto } from '@dtos/update-task.dto';
 import { Collections } from '@enums/collections';
 import { CollectionReference, QueryDocumentSnapshot, QuerySnapshot } from '@google-cloud/firestore';
 import { autoId } from '@google-cloud/firestore/build/src/util';
 import { Task } from '@models/task.model';
 import { Inject, Injectable } from '@nestjs/common';
 // import { InjectMapper } from '@timonmasberg/automapper-nestjs';
+import { ChangeList } from '@services/firestore-trigger.service';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
 import { PaginationBuilder } from '../pagination.model';
@@ -22,6 +24,7 @@ export class TaskRepository {
     @InjectPinoLogger(TaskRepository.name) private readonly logger: PinoLogger,
     // @InjectMapper() private readonly mapper: Mapper,
     @Inject(Collections.TASKS) private taskCollection: CollectionReference<TaskDto>,
+    @Inject(Collections.TASK_VERSIONS) private taskVersionsCollection: CollectionReference<ChangeList>,
   ) {}
 
   async getAllTaskByFarm(pagination: Pagination, sort?: Sorting, filter?: Filtering): Promise<Response<Task[]>> {
@@ -49,6 +52,18 @@ export class TaskRepository {
     return ApiResponseBuilder.notFound();
   }
 
+  async updateTask(task: Partial<UpdateTaskDto>): Promise<Response<boolean>> {
+    return this.taskCollection
+      .doc(task.id ?? '')
+      .set(task, { merge: true })
+      .then(() => {
+        return ApiResponseBuilder.success(200, 'Ok', true);
+      })
+      .catch((e) => {
+        return ApiResponseBuilder.withError(500, e.message);
+      });
+  }
+
   async createTask(task: TaskDto): Promise<Response<boolean>> {
     try {
       const taskId = autoId();
@@ -65,5 +80,16 @@ export class TaskRepository {
     } catch (e: any) {
       return ApiResponseBuilder.withError(500, e.message);
     }
+  }
+
+  async getTaskVersions(after: number): Promise<Response<ChangeList[]>> {
+    this.logger.info(`After => ${after}`);
+    const taskVersions = await this.taskVersionsCollection.where('changeListVersion', '>', after).get();
+
+    if (!taskVersions.empty) {
+      const data = taskVersions.docs.map((version) => version.data());
+      return ApiResponseBuilder.success(200, 'Ok', data);
+    }
+    return ApiResponseBuilder.notFound();
   }
 }

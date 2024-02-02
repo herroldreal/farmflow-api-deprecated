@@ -48,12 +48,17 @@ export const api = functions.https.onRequest(async (request, response) => {
   expressServer(request, response);
 });
 
-export const taskOnCreateTriggers = functions.firestore.document('tasks').onCreate(async (change, context) => {
+export const taskOnCreateTriggers = functions.firestore.document('tasks/{taskId}').onCreate(async (change, context) => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   await app.get(FirestoreTriggerService).taskOnCreateTrigger(change, context);
 });
-export const taskOnDeleteTrigger = functions.firestore.document('tasks').onDelete(async (snapshot, context) => {
+export const taskOnDeleteTrigger = functions.firestore
+  .document('tasks/{taskId}')
+  .onDelete(async (snapshot, context) => {
+    const app = await NestFactory.create<NestExpressApplication>(AppModule);
+    await app.get(FirestoreTriggerService).taskOnDeleteTrigger(snapshot, context);
+  });
+export const taskOnUpdateTrigger = functions.firestore.document('tasks/{taskId}').onUpdate(async (change, context) => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  app.get(FirestoreTriggerService).taskOnUpdateTrigger(snapshot, context);
+  await app.get(FirestoreTriggerService).taskOnUpdateTrigger(change, context);
 });
-// export const taskOnUpdateTrigger = functions.firestore.document('tasks').onUpdate((change, context) => {});
